@@ -7,6 +7,7 @@
 import yaml from 'js-yaml';
 import path from 'node:path';
 import fs from 'node:fs/promises';
+import { isGitHubConfigured, githubWriteFile, githubDeleteFile } from './github-api';
 
 export interface AuthorData {
     name: string;
@@ -80,20 +81,23 @@ export async function readAuthor(slug: string): Promise<AuthorFile | null> {
  */
 export async function writeAuthor(slug: string, data: AuthorData): Promise<boolean> {
     try {
-        const filename = slugToFilename(slug);
-        const filePath = path.join(AUTHORS_DIR, filename);
-        
-        // Limpar valores undefined
         const cleanedData = Object.fromEntries(
             Object.entries(data).filter(([, value]) => value !== undefined)
         );
-        
         const yamlContent = yaml.dump(cleanedData, {
-            lineWidth: -1,
-            noRefs: true,
-            quotingType: '"',
+            lineWidth: -1, noRefs: true, quotingType: '"',
         });
-        
+        const filename = slugToFilename(slug);
+
+        if (isGitHubConfigured()) {
+            return githubWriteFile(
+                `src/content/authors/${filename}`,
+                yamlContent,
+                `content: save author "${slug}"`,
+            );
+        }
+
+        const filePath = path.join(AUTHORS_DIR, filename);
         await fs.writeFile(filePath, yamlContent, 'utf-8');
         return true;
     } catch (error) {
@@ -108,6 +112,14 @@ export async function writeAuthor(slug: string, data: AuthorData): Promise<boole
 export async function deleteAuthor(slug: string): Promise<boolean> {
     try {
         const filename = slugToFilename(slug);
+
+        if (isGitHubConfigured()) {
+            return githubDeleteFile(
+                `src/content/authors/${filename}`,
+                `content: delete author "${slug}"`,
+            );
+        }
+
         const filePath = path.join(AUTHORS_DIR, filename);
         await fs.unlink(filePath);
         return true;

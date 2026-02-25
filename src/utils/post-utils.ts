@@ -22,6 +22,7 @@ import matter from 'gray-matter';
 import yaml from 'js-yaml';
 import path from 'node:path';
 import fs from 'node:fs/promises';
+import { isGitHubConfigured, githubWriteFile, githubDeleteFile } from './github-api';
 
 export interface PostData {
     title: string;
@@ -100,7 +101,7 @@ export async function listPosts(): Promise<PostFile[]> {
 }
 
 /**
- * Escreve um post em arquivo .mdoc
+ * Escreve um post em arquivo .mdoc (local ou via GitHub API em produção)
  */
 export async function writePost(
     slug: string,
@@ -108,30 +109,30 @@ export async function writePost(
     content: string
 ): Promise<boolean> {
     try {
-        const filename = slugToFilename(slug);
-        const filePath = path.join(POSTS_DIR, filename);
-        
-        // Formatar frontmatter YAML (remover campos undefined)
-        const cleanData: any = {};
+        const cleanData: Record<string, unknown> = {};
         Object.keys(data).forEach(key => {
-            const value = (data as any)[key];
+            const value = (data as Record<string, unknown>)[key];
             if (value !== undefined && value !== null && value !== '') {
                 cleanData[key] = value;
             }
         });
-        
+
         const frontmatter = yaml.dump(cleanData, {
-            lineWidth: -1,
-            noRefs: true,
-            quotingType: '"',
+            lineWidth: -1, noRefs: true, quotingType: '"',
         });
-        
-        // Montar arquivo completo
         const fileContent = `---\n${frontmatter}---\n\n${content || ''}`;
-        
-        // Escrever arquivo
+        const filename = slugToFilename(slug);
+
+        if (isGitHubConfigured()) {
+            return githubWriteFile(
+                `src/content/posts/${filename}`,
+                fileContent,
+                `content: save post "${slug}"`,
+            );
+        }
+
+        const filePath = path.join(POSTS_DIR, filename);
         await fs.writeFile(filePath, fileContent, 'utf-8');
-        
         return true;
     } catch (error) {
         console.error(`❌ Erro ao escrever post ${slug}:`, error);
@@ -140,11 +141,19 @@ export async function writePost(
 }
 
 /**
- * Deleta um post
+ * Deleta um post (local ou via GitHub API em produção)
  */
 export async function deletePost(slug: string): Promise<boolean> {
     try {
         const filename = slugToFilename(slug);
+
+        if (isGitHubConfigured()) {
+            return githubDeleteFile(
+                `src/content/posts/${filename}`,
+                `content: delete post "${slug}"`,
+            );
+        }
+
         const filePath = path.join(POSTS_DIR, filename);
         await fs.unlink(filePath);
         return true;

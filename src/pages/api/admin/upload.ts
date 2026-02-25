@@ -1,92 +1,74 @@
 import type { APIRoute } from 'astro';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { isGitHubConfigured, githubWriteFileBuffer } from '../../../utils/github-api';
 
 /**
- * api/admin/upload.ts
- * 
- * API route para upload de imagens.
- * Organiza imagens por tipo em subpastas: posts, authors, themes, general
+ * Upload de imagens.
+ * - Em produção com BLOB_READ_WRITE_TOKEN → usa Vercel Blob
+ * - Em produção com GitHub configurado → commita via GitHub API
+ * - Em dev local → salva em public/images/
  */
-
-const ALLOWED_TYPES = ['posts', 'authors', 'themes', 'general'] as const;
-type MediaType = typeof ALLOWED_TYPES[number];
 
 export const POST: APIRoute = async ({ request }) => {
     try {
         const formData = await request.formData();
         const file = formData.get('file') as File;
-        const type = (formData.get('type') as string) || 'general';
-        
+        const type  = (formData.get('type') as string) || 'general';
+
         if (!file) {
-            return new Response(JSON.stringify({
-                success: false,
-                error: 'Nenhum arquivo enviado',
-            }), {
-                status: 400,
-                headers: { 'Content-Type': 'application/json' },
-            });
+            return json({ success: false, error: 'Nenhum arquivo enviado' }, 400);
         }
-        
-        // Validar tipo de mídia
-        if (!ALLOWED_TYPES.includes(type as MediaType)) {
-            return new Response(JSON.stringify({
-                success: false,
-                error: `Tipo inválido. Tipos permitidos: ${ALLOWED_TYPES.join(', ')}`,
-            }), {
-                status: 400,
-                headers: { 'Content-Type': 'application/json' },
-            });
-        }
-        
-        // Validar tipo de arquivo
+
         if (!file.type.startsWith('image/')) {
-            return new Response(JSON.stringify({
-                success: false,
-                error: 'Apenas imagens são permitidas',
-            }), {
-                status: 400,
-                headers: { 'Content-Type': 'application/json' },
-            });
+            return json({ success: false, error: 'Apenas imagens são permitidas' }, 400);
         }
-        
-        // Gerar nome único
-        const timestamp = Date.now();
+
+        const timestamp    = Date.now();
         const originalName = file.name.replace(/[^a-zA-Z0-9.-]/g, '-');
-        const filename = `${timestamp}-${originalName}`;
-        
-        // Caminho de destino baseado no tipo
+        const filename     = `${timestamp}-${originalName}`;
+        const arrayBuffer  = await file.arrayBuffer();
+        const buffer       = Buffer.from(arrayBuffer);
+
+        // ── 1. Vercel Blob (preferencial em produção) ──────────────────────
+        if (process.env.BLOB_READ_WRITE_TOKEN) {
+            const { put } = await import('@vercel/blob');
+            const blob = await put(`images/${type}/${filename}`, buffer, {
+                access: 'public',
+                contentType: file.type,
+            });
+            return json({ success: true, url: blob.url, filename, type });
+        }
+
+        // ── 2. GitHub API (fallback em produção sem Blob) ──────────────────
+        if (isGitHubConfigured()) {
+            const githubPath = `public/images/${type}/${filename}`;
+            const ok = await githubWriteFileBuffer(
+                githubPath,
+                buffer,
+                `media: upload image "${filename}"`,
+            );
+            if (!ok) return json({ success: false, error: 'Erro ao commitar imagem' }, 500);
+            return json({ success: true, url: `/images/${type}/${filename}`, filename, type });
+        }
+
+        // ── 3. Filesystem local (dev) ──────────────────────────────────────
         const uploadDir = path.resolve(`./public/images/${type}`);
-        const filePath = path.join(uploadDir, filename);
-        
-        // Criar diretório se não existir
         await fs.mkdir(uploadDir, { recursive: true });
-        
-        // Converter File para Buffer e salvar
-        const arrayBuffer = await file.arrayBuffer();
-        const buffer = Buffer.from(arrayBuffer);
-        await fs.writeFile(filePath, buffer);
-        
-        // URL pública
-        const publicUrl = `/images/${type}/${filename}`;
-        
-        return new Response(JSON.stringify({
-            success: true,
-            url: publicUrl,
-            filename,
-            type,
-        }), {
-            status: 200,
-            headers: { 'Content-Type': 'application/json' },
-        });
-    } catch (error: any) {
-        console.error('❌ Erro ao fazer upload:', error);
-        return new Response(JSON.stringify({
-            success: false,
-            error: error.message,
-        }), {
-            status: 500,
-            headers: { 'Content-Type': 'application/json' },
-        });
+        await fs.writeFile(path.join(uploadDir, filename), buffer);
+
+        return json({ success: true, url: `/images/${type}/${filename}`, filename, type });
+
+    } catch (error: unknown) {
+        const msg = error instanceof Error ? error.message : 'Erro desconhecido';
+        console.error('❌ Upload error:', msg);
+        return json({ success: false, error: msg }, 500);
     }
 };
+
+function json(data: unknown, status = 200) {
+    return new Response(JSON.stringify(data), {
+        status,
+        headers: { 'Content-Type': 'application/json' },
+    });
+}

@@ -9,6 +9,7 @@ import yaml from 'js-yaml';
 import path from 'node:path';
 import fs from 'node:fs/promises';
 import { getEntry } from 'astro:content';
+import { isGitHubConfigured, githubWriteFile } from './github-api';
 
 const SINGLETONS_BASE_DIR = path.resolve('./src/content/singletons');
 
@@ -64,26 +65,28 @@ export async function readSingleton(name: string, themeId?: string): Promise<any
 /**
  * Escreve um singleton (cria ou atualiza) no tema ativo
  */
-export async function writeSingleton(name: string, data: any, themeId?: string): Promise<boolean> {
+export async function writeSingleton(name: string, data: unknown, themeId?: string): Promise<boolean> {
     try {
         const activeTheme = themeId || await getActiveThemeId();
-        const themeDir = path.join(SINGLETONS_BASE_DIR, activeTheme);
-        const filePath = path.join(themeDir, `${name}.yaml`);
-        
-        // Criar diretório se não existir
-        await fs.mkdir(themeDir, { recursive: true });
-        
-        // Limpar valores undefined
+
         const cleanedData = Object.fromEntries(
-            Object.entries(data).filter(([, value]) => value !== undefined)
+            Object.entries(data as Record<string, unknown>).filter(([, v]) => v !== undefined)
         );
-        
         const yamlContent = yaml.dump(cleanedData, {
-            lineWidth: -1,
-            noRefs: true,
-            quotingType: '"',
+            lineWidth: -1, noRefs: true, quotingType: '"',
         });
-        
+
+        if (isGitHubConfigured()) {
+            return githubWriteFile(
+                `src/content/singletons/${activeTheme}/${name}.yaml`,
+                yamlContent,
+                `content: save singleton "${name}"`,
+            );
+        }
+
+        const themeDir = path.join(SINGLETONS_BASE_DIR, activeTheme);
+        await fs.mkdir(themeDir, { recursive: true });
+        const filePath = path.join(themeDir, `${name}.yaml`);
         await fs.writeFile(filePath, yamlContent, 'utf-8');
         return true;
     } catch (error) {

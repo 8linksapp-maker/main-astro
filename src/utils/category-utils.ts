@@ -7,6 +7,7 @@
 import yaml from 'js-yaml';
 import path from 'node:path';
 import fs from 'node:fs/promises';
+import { isGitHubConfigured, githubWriteFile, githubDeleteFile } from './github-api';
 
 export interface CategoryData {
     name: string;
@@ -73,15 +74,20 @@ export async function readCategory(slug: string): Promise<CategoryFile | null> {
  */
 export async function writeCategory(slug: string, data: CategoryData): Promise<boolean> {
     try {
-        const filename = slugToFilename(slug);
-        const filePath = path.join(CATEGORIES_DIR, filename);
-        
         const yamlContent = yaml.dump(data, {
-            lineWidth: -1,
-            noRefs: true,
-            quotingType: '"',
+            lineWidth: -1, noRefs: true, quotingType: '"',
         });
-        
+        const filename = slugToFilename(slug);
+
+        if (isGitHubConfigured()) {
+            return githubWriteFile(
+                `src/content/categories/${filename}`,
+                yamlContent,
+                `content: save category "${slug}"`,
+            );
+        }
+
+        const filePath = path.join(CATEGORIES_DIR, filename);
         await fs.writeFile(filePath, yamlContent, 'utf-8');
         return true;
     } catch (error) {
@@ -96,6 +102,14 @@ export async function writeCategory(slug: string, data: CategoryData): Promise<b
 export async function deleteCategory(slug: string): Promise<boolean> {
     try {
         const filename = slugToFilename(slug);
+
+        if (isGitHubConfigured()) {
+            return githubDeleteFile(
+                `src/content/categories/${filename}`,
+                `content: delete category "${slug}"`,
+            );
+        }
+
         const filePath = path.join(CATEGORIES_DIR, filename);
         await fs.unlink(filePath);
         return true;
