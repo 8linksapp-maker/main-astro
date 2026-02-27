@@ -18,6 +18,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
 import StatCard from '../../components/admin/StatCard.astro';
 import RecentPosts from '../../components/admin/RecentPosts.astro';
 import ConfigStatus from '../../components/admin/ConfigStatus.astro';
+import OnboardingTour from '../../components/admin/OnboardingTour.astro';
 import { verifySession, SESSION_COOKIE } from '../../utils/auth-utils';
 
 // ─── Autenticação ─────────────────────────────────────────────────────────────
@@ -39,6 +40,15 @@ const isDefaultAccount = sessionUser.slug === 'admin';
 ---
 
 <AdminLayout title="Dashboard">
+
+    <!-- Dados para o OnboardingTour (lidos pelo script client-side) -->
+    <div
+        id="tour-server-data"
+        data-post-count={posts.length}
+        data-category-count={categories.length}
+        data-is-default-account={isDefaultAccount ? 'true' : 'false'}
+        style="display:none;"
+    ></div>
 
     <!-- Aviso de conta padrão -->
     {isDefaultAccount && (
@@ -96,8 +106,17 @@ const isDefaultAccount = sessionUser.slug === 'admin';
         </div>
     </div>
 
+    <!-- Onboarding: Checklist de primeiros passos -->
+    <div id="tour-checklist">
+        <OnboardingTour
+            postCount={posts.length}
+            categoryCount={categories.length}
+            isDefaultAccount={isDefaultAccount}
+        />
+    </div>
+
     <!-- Stats -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+    <div id="tour-stats" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <StatCard title="Total de Posts"    value={posts.length}      icon="📝" link="/admin/posts"      />
         <StatCard title="Posts Publicados"  value={publishedPosts.length} icon="✅" link="/admin/posts"  />
         <StatCard title="Rascunhos"         value={draftPosts}        icon="📄" link="/admin/posts"      />
@@ -111,7 +130,7 @@ const isDefaultAccount = sessionUser.slug === 'admin';
         </div>
 
         <!-- Ações rápidas -->
-        <div class="admin-card p-6">
+        <div id="tour-quick-actions" class="admin-card p-6">
             <h3 class="text-base font-heading font-bold text-[#e5e5e5] mb-4">⚡ Ações Rápidas</h3>
             <div class="space-y-2">
                 <a href="/admin/posts/new"   class="admin-btn admin-btn-primary  text-sm w-full justify-center">+ Novo Post</a>

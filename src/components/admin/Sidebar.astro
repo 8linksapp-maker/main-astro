@@ -36,6 +36,7 @@ const menuItems = [
 ---
 
 <aside
+    id="tour-sidebar"
     class="w-64 flex flex-col"
     style="background: var(--admin-surface); border-right: 1px solid var(--admin-border);"
 >
@@ -56,21 +57,29 @@ const menuItems = [
     </div>
 
     <!-- Navigation -->
-    <nav class="flex-1 p-3 space-y-1 overflow-y-auto">
-        {menuItems.map((item) => (
-            <a
-                href={item.href}
-                class={`admin-sidebar-item ${active(item.href) ? 'active' : ''}`}
-            >
-                <span class="text-lg">{item.icon}</span>
-                <span class="font-medium text-sm flex-1">{item.label}</span>
-            </a>
-        ))}
+    <nav id="tour-nav" class="flex-1 p-3 space-y-1 overflow-y-auto">
+        {menuItems.map((item) => {
+            const tourId =
+                item.href === '/admin/posts'    ? 'tour-posts-link'   :
+                item.href === '/admin/authors'  ? 'tour-authors-link' :
+                item.href === '/admin/pages'    ? 'tour-pages-link'   : undefined;
+            return (
+                <a
+                    href={item.href}
+                    id={tourId}
+                    class={`admin-sidebar-item ${active(item.href) ? 'active' : ''}`}
+                >
+                    <span class="text-lg">{item.icon}</span>
+                    <span class="font-medium text-sm flex-1">{item.label}</span>
+                </a>
+            );
+        })}
     </nav>
 
     <!-- Footer -->
     <div class="p-3 space-y-1" style="border-top: 1px solid var(--admin-border);">
         <a
+            id="tour-view-site"
             href="/"
             target="_blank"
             class="admin-sidebar-item"
