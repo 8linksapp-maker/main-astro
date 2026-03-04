@@ -17,6 +17,7 @@ import WYSIWYGEditor from './WYSIWYGEditor';
 import TurndownService from 'turndown';
 import { marked } from 'marked';
 import { useToast, ToastList } from './Toast';
+import AdminImagePreview from './AdminImagePreview';
 
 interface Author {
     id: string;
@@ -35,6 +36,7 @@ interface PostData {
     category?: string;
     publishedDate?: string;
     thumbnail?: string;
+    metaTitle?: string;
     metaDescription?: string;
     metaImage?: string;
     content: string;
@@ -55,6 +57,8 @@ export default function PostEditor({ post, authors, categories }: Props) {
     const [category, setCategory] = useState(post?.category || '');
     const [publishedDate, setPublishedDate] = useState(post?.publishedDate || new Date().toISOString().split('T')[0]);
     const [thumbnail, setThumbnail] = useState(post?.thumbnail || '');
+    const [thumbnailPreviewBlob, setThumbnailPreviewBlob] = useState<string | null>(null);
+    const [metaTitle, setMetaTitle] = useState(post?.metaTitle || '');
     const [metaDescription, setMetaDescription] = useState(post?.metaDescription || '');
     const [metaImage, setMetaImage] = useState(post?.metaImage || '');
     
@@ -85,19 +89,6 @@ export default function PostEditor({ post, authors, categories }: Props) {
     useEffect(() => {
         setIsMounted(true);
     }, []);
-    
-    // Debug
-    useEffect(() => {
-        if (isMounted) {
-            console.log('✅ PostEditor montado', { 
-                hasPost: !!post, 
-                authorsCount: authors.length, 
-                categoriesCount: categories.length,
-                title,
-                slug
-            });
-        }
-    }, [isMounted]);
 
     // Gerar slug automaticamente do título
     useEffect(() => {
@@ -113,7 +104,7 @@ export default function PostEditor({ post, authors, categories }: Props) {
                     setSlug(generatedSlug);
                 }
             } catch (error) {
-                console.error('❌ Erro ao gerar slug:', error);
+                console.error('\x1b[31m✗ [X] Erro ao gerar slug:\x1b[0m', error);
             }
         }
     }, [title, slug, post]);
@@ -144,6 +135,7 @@ export default function PostEditor({ post, authors, categories }: Props) {
                 category: category || undefined,
                 publishedDate: isPublish ? (publishedDate || new Date().toISOString().split('T')[0]) : undefined,
                 thumbnail: thumbnail || undefined,
+                metaTitle: metaTitle || undefined,
                 metaDescription: metaDescription || undefined,
                 metaImage: metaImage || undefined,
                 content: markdownContent,
@@ -182,6 +174,9 @@ export default function PostEditor({ post, authors, categories }: Props) {
         const file = e.target.files?.[0];
         if (!file) return;
 
+        const blobUrl = URL.createObjectURL(file);
+        setThumbnailPreviewBlob(blobUrl);
+
         const formData = new FormData();
         formData.append('file', file);
         formData.append('type', 'posts');
@@ -199,8 +194,12 @@ export default function PostEditor({ post, authors, categories }: Props) {
                 showToast('error', 'Erro no upload', 'Não foi possível enviar a thumbnail');
             }
         } catch (error) {
-            console.error('❌ Erro no upload:', error);
+            console.error('\x1b[31m✗ Erro no upload:\x1b[0m', error);
             showToast('error', 'Erro no upload', 'Não foi possível enviar a thumbnail');
+        } finally {
+            URL.revokeObjectURL(blobUrl);
+            setThumbnailPreviewBlob(null);
+            e.target.value = '';
         }
     };
 
@@ -229,6 +228,21 @@ export default function PostEditor({ post, authors, categories }: Props) {
             showToast('error', 'Erro no upload', 'Não foi possível enviar a imagem');
         }
     };
+
+    // Atalhos de teclado: Ctrl+S = rascunho, Ctrl+Enter = publicar
+    useEffect(() => {
+        const onKeyDown = (e: KeyboardEvent) => {
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                handleSave(false);
+            } else if (e.ctrlKey && e.key === 'Enter') {
+                e.preventDefault();
+                handleSave(true);
+            }
+        };
+        window.addEventListener('keydown', onKeyDown);
+        return () => window.removeEventListener('keydown', onKeyDown);
+    }, [title, slug, content, author, category, publishedDate, thumbnail, metaTitle, metaDescription, metaImage, post]);
 
     // Proteção contra problemas de hidratação - só renderizar após montar
     if (!isMounted) {
@@ -348,22 +362,25 @@ export default function PostEditor({ post, authors, categories }: Props) {
                                 <span>Thumbnail (Imagem de Destaque)</span>
                             </h3>
                             <div className="space-y-4">
-                                {thumbnail && (
+                                {(thumbnail || thumbnailPreviewBlob) ? (
                                     <div className="relative">
-                                        <img
+                                        <AdminImagePreview
                                             src={thumbnail}
+                                            previewBlobUrl={thumbnailPreviewBlob}
                                             alt="Thumbnail preview"
-                                            className="w-full rounded-lg mb-2 border-2 border-primary/50"
+                                            className="w-full rounded-lg mb-2 border-2 border-primary/50 object-cover"
+                                            style={{ minHeight: 120 }}
                                         />
                                         <button
-                                            onClick={() => setThumbnail('')}
+                                            type="button"
+                                            onClick={() => { setThumbnail(''); setThumbnailPreviewBlob(null); }}
                                             className="absolute top-2 right-2 bg-red-500/80 hover:bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold transition-colors"
                                             title="Remover thumbnail"
                                         >
                                             ×
                                         </button>
                                     </div>
-                                )}
+                                ) : null}
                                 <label className="block">
                                     <input
                                         type="file"
@@ -373,7 +390,7 @@ export default function PostEditor({ post, authors, categories }: Props) {
                                         id="thumbnail-upload"
                                     />
                                     <span className="admin-btn admin-btn-primary w-full text-center cursor-pointer block">
-                                        {thumbnail ? '🔄 Trocar Thumbnail' : '📷 Adicionar Thumbnail'}
+                                        {thumbnail || thumbnailPreviewBlob ? '🔄 Trocar Thumbnail' : '📷 Adicionar Thumbnail'}
                                     </span>
                                 </label>
                                 <p className="text-xs text-[#737373]">
@@ -442,6 +459,21 @@ export default function PostEditor({ post, authors, categories }: Props) {
                                 SEO
                             </h3>
                             <div className="space-y-4">
+                                <div>
+                                    <label className="block text-sm font-semibold text-[#a3a3a3] mb-2">
+                                        Meta Title (opcional)
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={metaTitle}
+                                        onChange={(e) => setMetaTitle(e.target.value)}
+                                        className="admin-input"
+                                        placeholder="Título para SEO — deixe vazio para usar o título do post"
+                                    />
+                                    <p className="text-xs text-[#737373] mt-1">
+                                        {metaTitle.length > 0 ? `${metaTitle.length} caracteres` : 'Se vazio, usa o título do post'}
+                                    </p>
+                                </div>
                                 <div>
                                     <label className="block text-sm font-semibold text-[#a3a3a3] mb-2">
                                         Meta Description

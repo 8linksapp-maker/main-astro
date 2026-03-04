@@ -5,201 +5,182 @@ Sem banco de dados. Sem servidor. Você é dono de tudo.
 
 ---
 
+## 📌 Em 30 segundos: o que você vai fazer
+
+1. **Criar contas** → GitHub + Vercel (grátis)
+2. **Gerar um token** → No GitHub (copiar e guardar)
+3. **Clicar no botão** → Deploy com Vercel
+4. **Preencher 4 variáveis** → Nome do projeto, senha, token, seu usuário
+5. **Acessar o painel** → Criar sua conta OU fazer login
+6. **Ativar atualizações** → No GitHub (obrigatório, 1 minuto)
+7. **Personalizar** → Editar nome, logo, posts, páginas
+
+> 📖 **Dúvidas?** Consulte a [Central de Ajuda com FAQ completo →](https://8linksapp-maker.github.io/cnx) ou **Ajuda** no menu do painel.
+
+---
+
 ## 🚀 Deploy em 1 clique
 
-Clique no botão abaixo para começar — seu site estará no ar em menos de 5 minutos.
-
-> 📖 **Dúvidas?** Consulte a [Central de Ajuda com FAQ completo →](https://8linksapp-maker.github.io/cnx)
+Clique no botão abaixo para começar. Seu site estará no ar em **menos de 5 minutos**.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2F8linksapp-maker%2Fcnx&env=ADMIN_SECRET,GITHUB_TOKEN,GITHUB_OWNER,GITHUB_REPO&envDescription=ADMIN_SECRET%3A%20sua%20senha%20(login%3A%20admin%40admin.com%20%2B%20este%20valor)%20%7C%20GITHUB_TOKEN%3A%20gere%20em%20github.com%2Fsettings%2Ftokens%20marcando%20%22repo%22%20%7C%20GITHUB_OWNER%3A%20seu%20usu%C3%A1rio%20do%20GitHub%20%7C%20GITHUB_REPO%3A%20nome%20do%20projeto%20escolhido%20acima&envLink=https%3A%2F%2Fgithub.com%2F8linksapp-maker%2Fcnx%23-vari%C3%A1veis-de-ambiente&project-name=meu-site-cnx&repository-name=meu-site-cnx)
+
+> ⚠️ **Antes de clicar:** faça o Passo 2 (gerar token). Você vai precisar dele durante o deploy.
 
 ---
 
 ## 📋 Guia completo — do zero ao site no ar
 
-Siga os passos abaixo **em ordem**. Cada um leva menos de 2 minutos.
+Siga os passos **em ordem**. Cada um leva menos de 2 minutos.
 
 ---
 
 ### ✅ Passo 1 — Criar duas contas gratuitas
 
-Você vai precisar de:
-
 | Serviço | Para que serve | Link |
 |---|---|---|
-| **GitHub** | Guarda o código do seu site | [github.com/signup](https://github.com/signup) |
-| **Vercel** | Publica o site na internet | [vercel.com/signup](https://vercel.com/signup) |
+| **GitHub** | Guarda o código do seu site | [Criar conta no GitHub](https://github.com/signup) |
+| **Vercel** | Publica o site na internet | [Criar conta na Vercel](https://vercel.com/signup) |
 
-> 💡 **Dica:** Na Vercel, clique em **"Continue with GitHub"** — isso conecta as duas contas automaticamente.
+> 💡 **Dica:** Na Vercel, clique em **"Continue with GitHub"** — as duas contas ficarão conectadas.
 
 ---
 
 ### ✅ Passo 2 — Gerar o GITHUB_TOKEN (antes do deploy)
 
-Você vai precisar desse token durante o deploy. **Faça agora, antes de clicar no botão.**
+Você vai precisar desse token durante o deploy. **Faça isso agora.**
 
-1. Acesse [github.com/settings/tokens](https://github.com/settings/tokens/new?description=CNX+CMS&scopes=repo)  
-   *(o link já abre com as configurações corretas)*
-2. No campo **"Note"** já está preenchido — só rolar a página
-3. Clique em **"Generate token"** no final da página
-4. **Copie o token gerado** (começa com `ghp_...`) — você só verá ele uma vez ⚠️
+1. Acesse: [github.com/settings/tokens/new](https://github.com/settings/tokens/new?description=CNX+CMS&scopes=repo)  
+   *(o link já abre com as opções certas)*
+2. O campo **"Note"** pode ficar como está (ex: CNX CMS)
+3. Role a página até o final e clique em **"Generate token"**
+4. **Copie o token** (começa com `ghp_...`) — você só verá ele **uma vez** ⚠️
 
-> Guarde o token em um bloco de notas por agora. Você vai colar ele no próximo passo.
+> Guarde o token em um bloco de notas. Você vai colar no próximo passo.
 
 ---
 
-### ✅ Passo 3 — Fazer o deploy
+### ✅ Passo 3 — Fazer o deploy (copiar o template)
 
 1. Clique no botão **"Deploy with Vercel"** no topo desta página
-2. Faça login com sua conta do GitHub quando solicitado
-3. Escolha um nome para o projeto (ex: `meu-site-cnx`) — **anote este nome, você vai precisar dele**
-4. Preencha as 4 variáveis de ambiente:
+2. Faça login com sua conta do GitHub (se pedir)
+3. Escolha um **nome para o projeto** (ex: `meu-site-cnx`)  
+   — **Anote este nome.** Você vai precisar dele.
+4. Preencha as 4 variáveis na tela:
 
 | Variável | O que colocar | Exemplo |
 |---|---|---|
-| `ADMIN_SECRET` | Escolha uma senha — **será usada para entrar no painel** | `minhasenha2025` |
-| `GITHUB_TOKEN` | O token que você copiou no passo anterior | `ghp_abc123...` |
-| `GITHUB_OWNER` | Seu nome de usuário do GitHub | `joao-silva` |
-| `GITHUB_REPO` | O nome do projeto que você escolheu acima | `meu-site-cnx` |
+| `ADMIN_SECRET` | Uma senha que você escolhe (será usada para entrar no painel) | `minhasenha2025` |
+| `GITHUB_TOKEN` | O token que você copiou no Passo 2 | `ghp_abc123...` |
+| `GITHUB_OWNER` | Seu usuário do GitHub (clique na sua foto no canto do GitHub para ver) | `joao-silva` |
+| `GITHUB_REPO` | O **mesmo nome** do projeto que você digitou acima | `meu-site-cnx` |
 
-5. Clique em **Deploy** e aguarde ~2 minutos
+5. Clique em **Deploy** e aguarde cerca de 2 minutos
 
 Quando aparecer a tela de sucesso, seu site já está no ar! 🎉
 
-> 💡 **Como saber meu usuário do GitHub?** Clique na sua foto de perfil no canto superior direito do GitHub — seu usuário aparece no topo.
-
 ---
 
-### ✅ Passo 4 — Acessar o painel pela primeira vez
+### ✅ Passo 4 — Acessar o painel e criar/fazer login
 
-1. Acesse `https://SEU-PROJETO.vercel.app/admin`  
-   *(substitua `SEU-PROJETO` pelo nome que você escolheu no deploy)*
-2. Use as credenciais padrão:
+1. Acesse: `https://SEU-PROJETO.vercel.app/admin`  
+   *(troque `SEU-PROJETO` pelo nome que você deu no deploy)*
+
+2. Duas situações possíveis:
+
+   **A) Tela "Configuração Inicial"** (primeira vez):
+   - Preencha: Nome, E-mail, Senha e Confirme a senha
+   - Clique em **"Criar conta e entrar"**
+   - Pronto! Você já está logado.
+
+   **B) Tela "Entrar no Painel"** (login):
    - **E-mail:** `admin@admin.com`
-   - **Senha:** o valor que você colocou em `ADMIN_SECRET`
-3. Clique em **Entrar**
+   - **Senha:** o valor que você colocou em `ADMIN_SECRET` no deploy
+   - Clique em **"Entrar"**
 
-Você verá o painel administrativo do seu site. ✅
+3. Você verá o **Dashboard** do seu site.
 
 ---
 
-### ✅ Passo 5 — Personalizar sua conta de administrador
+### ✅ Passo 5 — Trocar e-mail e senha (segurança)
 
-> ⚠️ **Faça isso logo após o primeiro acesso** — por segurança, troque o e-mail e a senha padrão.
+> ⚠️ Faça isso logo após o primeiro acesso.
 
 1. No painel, clique em **Autores** no menu lateral
-2. Clique no autor **"Administrador"**
-3. Altere:
-   - **E-mail** → seu e-mail real
-   - **Senha** → uma senha própria e segura
-   - **Nome** → seu nome
+2. Clique no usuário **"Administrador"**
+3. Altere **E-mail**, **Senha** e **Nome** para os seus
 4. Clique em **Salvar**
 
-A partir deste momento, use seu e-mail e senha personalizados para entrar.
+A partir daí, use seu e-mail e senha para entrar.
 
 ---
 
-### ✅ Passo 6 — Ativar atualizações automáticas do template
+### ✅ Passo 6 — Ativar atualizações automáticas ⚠️ OBRIGATÓRIO
 
-Este passo é necessário para receber melhorias futuras do CNX automaticamente.
+**Este passo é essencial.** Sem ele, o botão "Aplicar agora" não funciona e você não receberá melhorias do template.
 
-1. Acesse seu repositório no GitHub  
-   *(vá em [github.com](https://github.com) → clique no repositório criado)*
-2. Clique em **Settings** (aba no menu superior do repositório)
-3. No menu lateral esquerdo, clique em **Actions → General**
-4. Role a página até encontrar **"Workflow permissions"**
+1. Acesse [github.com](https://github.com) e clique no **repositório** que foi criado no deploy
+2. Clique em **Settings** (Configurações) — aba no topo
+3. No menu da esquerda: **Actions** → **General**
+4. Role até **"Workflow permissions"**
 5. Marque **"Read and write permissions"**
 6. Marque **"Allow GitHub Actions to create and approve pull requests"** ✓
 7. Clique em **Save**
 
-> ⚠️ **Sem este passo**, as atualizações automáticas não funcionarão e você verá um erro se tentar rodar manualmente.
+> Se pular este passo, ao tentar atualizar o template pelo painel você verá erro. Volte e ative as permissões.
+
+**Guia detalhado:** No painel admin, vá em **Ajuda** → **Primeiros passos** (passo 3).
 
 ---
 
-### ✅ Passo 7 — Primeiros passos no painel
+### ✅ Passo 7 — Primeiros ajustes no site
 
-Após configurar tudo, faça estes ajustes iniciais no seu site:
-
-| O que fazer | Onde encontrar |
+| O que fazer | Onde ir no painel |
 |---|---|
-| Alterar o nome do site | Admin → **Páginas** → **Configurações** |
-| Adicionar o logo | Admin → **Páginas** → **Menu** |
-| Editar a página inicial | Admin → **Páginas** → **Home** |
-| Criar o primeiro post | Admin → **Posts** → **Novo Post** |
-| Configurar categoria | Admin → **Categorias** |
-| Personalizar cores e estilo | Admin → **Páginas** → **Tema** |
-| Ver o site publicado | Acesse `https://SEU-PROJETO.vercel.app` |
+| Alterar nome do site | **Páginas** → **Rodapé** (campo "Nome do site") |
+| Adicionar logo | **Páginas** → **Menu** |
+| Editar página inicial | **Páginas** → **Home** |
+| Criar o primeiro post | **Posts** → **Novo Post** |
+| Criar categorias | **Categorias** |
+| Ver o site público | Acesse `https://SEU-PROJETO.vercel.app` |
 
 ---
 
-### ✅ Passo 8 — Testar tudo
-
-Confirme que está funcionando:
+### ✅ Passo 8 — Conferir se tudo funciona
 
 | O que testar | Como testar |
 |---|---|
-| Site público abre | Acesse `https://SEU-PROJETO.vercel.app` |
+| Site abre | Acesse `https://SEU-PROJETO.vercel.app` |
 | Painel abre | Acesse `https://SEU-PROJETO.vercel.app/admin` |
 | Login funciona | Use seu e-mail e senha |
-| Criar post funciona | Admin → Posts → Novo Post → Salvar |
-| Post aparece no blog | Acesse o blog público após salvar |
-
-> Se algo não funcionar, veja a seção [Solução de Problemas](#-solução-de-problemas) abaixo.
-
----
-
-## 🎨 Criar um tema personalizado com IA
-
-O CNX possui um **Wizard de Criação de Temas** integrado ao painel admin.
-
-Ele gera um prompt completo para você colar no **Cursor** (IDE com IA) — a IA cria o tema, faz o commit e publica na Vercel automaticamente.
-
-**Como acessar:** Admin → **🎨 Criar Tema com IA**
-
-**O que o wizard faz:**
-- Coleta sua identidade visual (cores, estilo, fonte)
-- Configura SEO, Open Graph e Schema.org
-- Gera o texto da página /sobre e /contato
-- Produz um prompt único pronto para o Cursor Agent
-
-**Tipos de site disponíveis:**
-| Tipo | Status |
-|---|---|
-| 📝 Blog / Conteúdo | ✅ Disponível |
-| 🏠 Imobiliária | 🔒 Em breve |
-| 🍕 Restaurante | 🔒 Em breve |
-| 💼 Portfólio | 🔒 Em breve |
-| 👩‍⚕️ Clínica / Saúde | 🔒 Em breve |
-| 🎓 Curso / Mentoria | 🔒 Em breve |
+| Criar post | **Posts** → **Novo Post** → Salvar |
+| Post no blog | Acesse o blog após salvar |
 
 ---
 
 ## 🔄 Como receber atualizações do template
 
-O CNX atualiza o template **automaticamente** toda segunda-feira. Quando há novidades, seu site é reconstruído sem você precisar fazer nada.
+O CNX lança melhorias regularmente. Quando há novidade, você vê um **banner amarelo** no topo do painel com o botão **"🔄 Aplicar agora"**.
 
-### Atualização automática (toda segunda-feira às 9h)
-
-Quando há melhorias disponíveis, o sistema aplica automaticamente e a Vercel reconstrói seu site em ~2 minutos.
-
-> **Seu conteúdo (posts, páginas, imagens) nunca é alterado.** Apenas os arquivos de código do template são atualizados.
-
-### Atualizar agora pelo painel (sem abrir o GitHub)
-
-Se não quiser esperar segunda-feira, atualize direto pelo painel admin:
+### Atualizar pelo painel (1 clique)
 
 1. Acesse `https://SEU-SITE.vercel.app/admin`
-2. No **Dashboard**, se houver atualização disponível, aparecerá um botão amarelo **"🔄 Aplicar agora"**
-3. Clique no botão — pronto! O site será reconstruído em ~2 minutos ✅
+2. Se houver atualização, aparecerá um banner amarelo no topo
+3. Clique em **"🔄 Aplicar agora"**
+4. Em cerca de 2 minutos o site será reconstruído ✅
 
-### Atualizar manualmente pelo GitHub (alternativa)
+> **Seu conteúdo (posts, imagens, páginas) não é alterado.** Só o código do template é atualizado.
 
-1. Acesse seu repositório no GitHub
+### Atualização automática (segunda-feira às 9h)
+
+Se você ativou o **Passo 6**, o sistema verifica atualizações toda segunda-feira e pode aplicar automaticamente.
+
+### Atualizar manualmente pelo GitHub
+
+1. Abra seu repositório no GitHub
 2. Clique na aba **"Actions"**
 3. Clique em **"🔄 Atualizar Template CNX"**
 4. Clique em **"Run workflow"** → **"Run workflow"**
-
-> ⚠️ Se aparecer o erro *"GitHub Actions is not permitted to create or approve pull requests"*, volte ao **Passo 6** e ative a permissão.
 
 ---
 
@@ -207,126 +188,123 @@ Se não quiser esperar segunda-feira, atualize direto pelo painel admin:
 
 | Seção | O que faz |
 |---|---|
-| **Dashboard** | Visão geral do site com versão do template e status de configuração |
-| **Posts** | Criar, editar e publicar artigos no blog |
-| **Autores** | Gerenciar autores e perfis |
-| **Categorias** | Organizar posts por categoria |
+| **Dashboard** | Visão geral, checklist de primeiros passos, versão do template |
+| **Posts** | Criar e editar artigos do blog |
+| **Autores** | Gerenciar contas que acessam o painel |
+| **Categorias** | Organizar posts por tema |
 | **Mídia** | Fazer upload de imagens |
 | **Páginas** | Editar Home, Sobre, Contato, Menu, Rodapé |
-| **Analytics** | Ver dados do Google Analytics |
-| **Pixels** | Configurar Google Analytics e Meta Pixel |
-| **Importar WordPress** | Importar posts de um site WordPress |
-| **🎨 Criar Tema com IA** | Gerar prompt para criar tema personalizado no Cursor |
+| **Configurações** | IA para conteúdo, SEO (sitemap, robots.txt), Contato (telefone/WhatsApp) |
+| **Configurações → Changelog** | Ver o que mudou em cada versão do template |
+| **Pixels** | Google Analytics e Meta Pixel |
+| **Importar WordPress** | Trazer posts de um site WordPress |
+| **Ajuda** | Guia completo e solução de problemas |
 
 ---
 
-## ⚙️ Variáveis de ambiente — referência completa
+## ⚙️ Variáveis de ambiente (referência)
 
 Configure em: **Vercel → Settings → Environment Variables**
 
 | Variável | Obrigatória | Descrição |
 |---|---|---|
-| `ADMIN_SECRET` | **Sim** | **Sua senha de acesso ao painel.** Escolha um valor seguro (ex: `minhasenha2025`). Use esse mesmo valor para fazer login com o e-mail `admin@admin.com`. |
-| `GITHUB_TOKEN` | **Sim** | Personal Access Token (permissão `repo`) — permite salvar conteúdo pelo painel em produção |
-| `GITHUB_OWNER` | **Sim** | Seu usuário do GitHub (ex: `joao-silva`) |
+| `ADMIN_SECRET` | **Sim** | Senha de acesso ao painel. Use com o e-mail `admin@admin.com` até criar sua conta. |
+| `GITHUB_TOKEN` | **Sim** | Token do GitHub (permissão `repo`) — permite salvar pelo painel em produção |
+| `GITHUB_OWNER` | **Sim** | Seu usuário do GitHub |
 | `GITHUB_REPO` | **Sim** | Nome do repositório (ex: `meu-site-cnx`) |
-| `OPENAI_API_KEY` | Opcional | Chave da OpenAI para geração de posts com IA |
+| `OPENAI_API_KEY` | Opcional | Chave da OpenAI para gerar posts com IA |
 
 ---
 
 ## 🛠️ Solução de Problemas
 
-### ❓ O painel não aceita meu login
+### O painel não aceita meu login
 
-- Verifique que o e-mail é `admin@admin.com` (se ainda não trocou)
-- A senha é o valor de `ADMIN_SECRET` — não é `padrao123`, é o valor que **você** definiu
-- Se esqueceu o ADMIN_SECRET, veja a seção "Esqueci a senha" abaixo
+- Se ainda não trocou: use **E-mail** `admin@admin.com` e **Senha** = valor de `ADMIN_SECRET`
+- Se o template veio com conta padrão: E-mail `admin@admin.com` e Senha `admin123`
+- Troque a senha em **Autores** → Editar administrador
 
-### ❓ Não consigo salvar posts pelo painel (erro ao publicar)
+### Esqueci a senha
 
-As variáveis `GITHUB_TOKEN`, `GITHUB_OWNER` e `GITHUB_REPO` não estão configuradas ou estão incorretas.
+1. Vá em **Vercel** → seu projeto → **Settings** → **Environment Variables**
+2. Edite `ADMIN_SECRET` e coloque uma nova senha
+3. Salve e aguarde o redeploy (~1 min)
+4. Entre com `admin@admin.com` e a nova senha
 
-1. Acesse **Vercel → seu projeto → Settings → Environment Variables**
-2. Verifique se as três variáveis estão lá com os valores corretos
-3. Se precisar corrigir, edite e depois clique em **Redeploy** no painel da Vercel
+### Não consigo salvar posts (erro ao publicar)
 
-### ❓ GitHub Actions falha ao criar Pull Request
+As variáveis `GITHUB_TOKEN`, `GITHUB_OWNER` e `GITHUB_REPO` estão faltando ou incorretas.
 
-Você precisa ativar as permissões. Volte ao **Passo 6** deste guia.
+1. **Vercel** → projeto → **Settings** → **Environment Variables**
+2. Confira se as três variáveis existem e estão corretas
+3. Se alterou algo, faça **Redeploy** no painel da Vercel
 
-### ❓ O site abre em branco ou mostra erro 500
+### "Aplicar agora" dá erro
 
-1. Acesse **Vercel → seu projeto → Deployments**
-2. Clique no último deploy e veja os logs de erro
-3. Geralmente o problema é uma variável de ambiente ausente ou incorreta
+Você precisa fazer o **Passo 6** — ativar as permissões do GitHub Actions.  
+No painel: **Ajuda** → **Primeiros passos** → Passo 3.
 
-### ❓ As atualizações automáticas não chegam
+### O site abre em branco ou erro 500
 
-- Confirme que fez o **Passo 6** (GitHub Actions permissions)
-- Verifique se as Actions estão habilitadas: repositório → aba **Actions** → se aparecer uma mensagem pedindo para ativar, clique em **"I understand my workflows, go ahead and enable them"**
+1. **Vercel** → projeto → **Deployments**
+2. Clique no último deploy e veja os logs
+3. Em geral o problema é variável de ambiente ausente ou incorreta
 
----
+### Atualizações não chegam
 
-## 🔑 Esqueci a senha do admin
-
-**Opção 1 — Trocar o ADMIN_SECRET (mais fácil):**
-
-1. Acesse **Vercel → seu projeto → Settings → Environment Variables**
-2. Edite `ADMIN_SECRET` com uma nova senha
-3. Clique em **Save** e aguarde o redeploy (~1 min)
-4. Use a nova senha para entrar com `admin@admin.com`
-
-**Opção 2 — Remover o hash pelo GitHub:**
-
-1. Acesse seu repositório no GitHub
-2. Navegue até `src/content/authors/`
-3. Abra o arquivo `.yaml` do seu usuário
-4. **Remova a linha** `adminPasswordHash: ...`
-5. Faça commit da alteração
-6. Acesse `/admin/setup` para recriar a conta
+- Confirme que fez o **Passo 6**
+- No GitHub: aba **Actions** → se pedir para ativar, clique em **"I understand my workflows, go ahead and enable them"**
 
 ---
 
 ## 💻 Rodar localmente (para desenvolvedores)
 
 ```bash
-# 1. Clone o repositório
+# 1. Clonar o repositório
 git clone https://github.com/SEU-USUARIO/SEU-REPO.git
 cd SEU-REPO
 
-# 2. Instale as dependências
+# 2. Instalar dependências
 bun install
 
-# 3. Crie o arquivo de variáveis
+# 3. Copiar variáveis
 cp .env.example .env
-# Edite o .env e adicione suas variáveis
+# Edite o .env com suas variáveis
 
-# 4. Inicie o servidor
+# 4. Iniciar o servidor
 bun dev
 ```
 
-Acesse **http://localhost:4321** para ver o site.  
-Acesse **http://localhost:4321/admin** para o painel.  
-Login local: `admin@admin.com` / `padrao123` (ou o ADMIN_SECRET do seu `.env`)
+- Site: **http://localhost:4321**
+- Painel: **http://localhost:4321/admin**
+- Login local: `admin@admin.com` / senha do `.env` (ou `admin123` no template padrão)
 
-### Publicar alterações feitas localmente
+### Erro "EMFILE: too many open files"
+
+```bash
+ulimit -n 65536
+bun dev
+```
+
+### Publicar alterações
 
 ```bash
 git add .
-git commit -m "descrição do que você alterou"
+git commit -m "descrição das alterações"
 git push origin main
-# A Vercel detecta o push e republica o site em ~1 minuto
 ```
+
+A Vercel detecta o push e republica o site em cerca de 1 minuto.
 
 ---
 
 ## 🛠️ Tecnologias
 
-- **[Astro](https://astro.build)** — Framework web moderno e ultrarrápido
-- **[Vercel](https://vercel.com)** — Hospedagem serverless gratuita
-- **[Tailwind CSS](https://tailwindcss.com)** — Estilização utilitária
-- **[React](https://react.dev)** — Componentes interativos do painel
-- **[TipTap](https://tiptap.dev)** — Editor de texto rico (WYSIWYG)
+- **[Astro](https://astro.build)** — Framework web moderno
+- **[Vercel](https://vercel.com)** — Hospedagem gratuita
+- **[Tailwind CSS](https://tailwindcss.com)** — Estilização
+- **[React](https://react.dev)** — Componentes do painel
+- **[TipTap](https://tiptap.dev)** — Editor de texto rico
 
 ---
 

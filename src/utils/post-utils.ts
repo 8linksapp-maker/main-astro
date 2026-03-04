@@ -31,6 +31,7 @@ export interface PostData {
     category?: string;
     publishedDate?: string;
     thumbnail?: string;
+    metaTitle?: string;
     metaDescription?: string;
     metaImage?: string;
 }
@@ -42,6 +43,7 @@ export interface PostFile {
 }
 
 const POSTS_DIR = path.resolve('./src/content/posts');
+const DELETED_DIR = path.join(POSTS_DIR, '_deleted');
 
 /**
  * Gera nome de arquivo baseado no slug
@@ -141,7 +143,9 @@ export async function writePost(
 }
 
 /**
- * Deleta um post (local ou via GitHub API em produção)
+ * Deleta um post (local ou via GitHub API em produção).
+ * Em ambiente local: faz soft delete (move para _deleted) para evitar
+ * UnknownFilesystemError da Astro Content Layer ao usar fs.unlink.
  */
 export async function deletePost(slug: string): Promise<boolean> {
     try {
@@ -155,10 +159,20 @@ export async function deletePost(slug: string): Promise<boolean> {
         }
 
         const filePath = path.join(POSTS_DIR, filename);
-        await fs.unlink(filePath);
+
+        try {
+            await fs.access(filePath);
+        } catch {
+            console.error(`\x1b[31m✗ [X] Post não encontrado: ${slug}\x1b[0m`);
+            return false;
+        }
+
+        await fs.mkdir(DELETED_DIR, { recursive: true });
+        const deletedPath = path.join(DELETED_DIR, `${filename}.deleted`);
+        await fs.rename(filePath, deletedPath);
         return true;
     } catch (error) {
-        console.error(`❌ Erro ao deletar post ${slug}:`, error);
+        console.error('\x1b[31m✗ [X] Erro ao deletar post', slug, ':\x1b[0m', error);
         return false;
     }
 }

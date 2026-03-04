@@ -9,6 +9,7 @@
 #   - Baixa apenas os arquivos de CÓDIGO do template (nunca toca no seu conteúdo)
 #   - Se houver novidades, abre um PR para você revisar e dar Merge
 #
+# ARQUIVOS ATUALIZADOS: src/components, src/data (temas), src/layouts, src/pages, etc.
 # ARQUIVOS QUE NUNCA SÃO ALTERADOS:
 #   - src/content/  (seus posts, autores, categorias, páginas)
 #   - public/images (suas imagens enviadas pelo painel)
@@ -59,6 +60,7 @@ jobs:
           # O conteúdo do aluno (src/content/ e public/images/) NÃO é tocado
           git checkout template/main -- \
             src/components/ \
+            src/data/ \
             src/layouts/ \
             src/pages/ \
             src/styles/ \

@@ -38,3 +38,6 @@ README-ESTRUTURA.md
 
 # imagens enviadas pelo usuário (conteúdo específico de cada site)
 public/images/posts/
+
+# posts excluídos em ambiente local (soft delete)
+src/content/posts/_deleted/

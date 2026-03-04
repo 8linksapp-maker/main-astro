@@ -11,6 +11,7 @@ const posts = defineCollection({
         publishedDate: z.string().optional(),
         category: z.string().optional(),
         thumbnail: z.string().optional(),
+        metaTitle: z.string().optional(),
         metaDescription: z.string().optional(),
         metaImage: z.string().optional(),
     }),
@@ -104,12 +105,57 @@ const siteThemes = defineCollection({
 });
 
 const siteSettings = defineCollection({
-    loader: glob({ pattern: 'settings.yaml', base: './src/content/singletons' }),
+    loader: glob({
+        pattern: 'settings.yaml',
+        base: './src/content/singletons',
+        generateId: ({ entry }) => entry.replace(/\.yaml$/, ''), // id = 'settings'
+    }),
     schema: z.object({
         activeTheme: z.string().optional(),
         siteName: z.string(),
         colorScheme: z.enum(['dark', 'light']).default('dark'),
+        siteMode: z.enum(['blog', 'local']).default('blog'),
+        aiProvider: z.enum(['openai', 'gemini']).default('gemini').optional(),
+        aiApiKey: z.string().optional(),
+        // SEO Técnico (sitemap, robots.txt) — configurável no admin
+        canonicalUrl: z.string().optional(),
+        generateSitemap: z.boolean().default(true),
+        generateRobots: z.boolean().default(true),
+        robotsDisallow: z.array(z.string()).optional(),
+        // Contato centralizado — usado em Header, Footer, páginas locais, schema JSON-LD
+        companyPhone: z.string().optional(),
+        companyWhatsapp: z.string().optional(),
     }),
+});
+
+const outlineItem = z.object({
+    level: z.enum(['h1', 'h2', 'h3', 'h4']),
+    text:  z.string(),
+});
+
+const services = defineCollection({
+    loader: glob({ pattern: '**/*.yaml', base: './src/content/services' }),
+    schema: z.object({
+        niche: z.string().optional(),
+        title: z.string(),
+        slug: z.string(),
+        icon: z.string().optional(),
+        shortDescription: z.string().optional(),
+        heroTitle: z.string().optional(),
+        heroSubtitle: z.string().optional(),
+        description: z.string().optional(),
+        benefits: z.array(z.string()).optional(),
+        metaTitle: z.string().optional(),
+        metaDescription: z.string().optional(),
+        active: z.boolean().default(true),
+        image: z.string().optional(),
+        thumbnail: z.string().optional(),
+        // Campos de SEO programático
+        outline: z.array(outlineItem).optional(),
+        generatedContent: z.string().optional(),
+        outlineSource: z.string().optional(),
+        contentGeneratedAt: z.string().optional(),
+    }).passthrough(),
 });
 
 const lp1 = defineCollection({
@@ -223,4 +269,29 @@ const lp1 = defineCollection({
     }).passthrough(),
 });
 
-export const collections = { posts, authors, categories, homepage, siteThemes, siteSettings, lp1 };
+const locations = defineCollection({
+    loader: glob({ pattern: '**/*.yaml', base: './src/content/locations' }),
+    schema: z.object({
+        name: z.string(),
+        slug: z.string(),
+        state: z.string(),
+        city: z.string().optional(),
+        citySlug: z.string().optional(),
+        type: z.enum(['cidade', 'bairro', 'regiao', 'zona']).default('cidade'),
+        active: z.boolean().default(true),
+    }),
+});
+
+const nichos = defineCollection({
+    loader: glob({ pattern: '**/*.yaml', base: './src/content/nichos' }),
+    schema: z.object({
+        name: z.string(),
+        slug: z.string(),
+        icon: z.string().optional(),
+        description: z.string().optional(),
+        color: z.string().optional(),
+        active: z.boolean().default(true),
+    }),
+});
+
+export const collections = { posts, authors, categories, homepage, siteThemes, siteSettings, lp1, services, locations, nichos };

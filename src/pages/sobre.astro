@@ -1,23 +1,71 @@
 ---
 /**
- * sobre.astro - Página Sobre Nós
- * 
- * Página institucional sobre a empresa seguindo o mesmo padrão de design da home.
- * Estrutura: Hero, Missão/Visão, Valores, Equipe, CTA
+ * sobre.astro - Página Sobre Nós / Quem Somos
+ *
+ * Roteia para o componente correto conforme siteMode:
+ * - local → themes/local/Sobre.astro (identidade visual azul/WhatsApp)
+ * - blog  → MainLayout com conteúdo do tema classic (roxo/preto)
  */
 
 import { getEntry } from 'astro:content';
 import MainLayout from '../layouts/MainLayout.astro';
+import LocalSobre from '../themes/local/Sobre.astro';
 import { readSingleton } from '../utils/singleton-utils';
 
-// Obter tema ativo
-const settings = await getEntry('siteSettings', 'settings');
-const activeThemeId = settings?.data.activeTheme || 'classic';
+const settings = await getEntry('siteSettings', 'settings').catch(() => null);
+const siteMode = settings?.data?.siteMode || 'blog';
+const isLocal = siteMode === 'local';
 
-const data = await readSingleton('about', activeThemeId);
+let data: Record<string, unknown> | null;
+if (isLocal) {
+    const localAbout = await readSingleton('about', 'local');
+    if (localAbout) {
+        data = localAbout;
+    } else {
+        const localHome = await readSingleton('home', 'local') || {};
+        data = {
+            heroTitle: localHome.aboutTitle || 'Quem Somos',
+            heroSubtitle: localHome.aboutSubtitle || '',
+            heroBackground: localHome.heroBackground || '',
+            aboutImage: localHome.aboutImage || null,
+            aboutText: localHome.aboutText || 'Profissionais especializados com qualidade e confiança em cada serviço.',
+            aboutStats: localHome.aboutStats || [],
+            missionTitle: 'Nossa Missão',
+            missionDescription: localHome.aboutText || 'Profissionais especializados com qualidade e confiança em cada serviço.',
+            visionTitle: 'Nossa Visão',
+            visionDescription: 'Ser referência em atendimento na nossa região, com foco em qualidade e satisfação do cliente.',
+            values: localHome.aboutValues || [
+                { icon: '⭐', title: 'Qualidade', description: 'Serviços executados com excelência e materiais selecionados.' },
+                { icon: '⏱️', title: 'Pontualidade', description: 'Compromisso com prazos e respeito ao seu tempo.' },
+                { icon: '💬', title: 'Transparência', description: 'Orçamento claro e sem surpresas no valor final.' },
+                { icon: '🛡️', title: 'Garantia', description: 'Trabalho com garantia para sua tranquilidade.' },
+            ],
+            valuesTitle: 'Nossos Valores',
+            differentials: localHome.aboutDifferentials || [
+                'Profissionais qualificados e certificados',
+                'Orçamento sem compromisso',
+                'Atendimento rápido na sua região',
+                'Materiais de qualidade',
+                'Garantia em todos os serviços',
+            ],
+            differentialsTitle: 'Por que nos escolher?',
+            ctaTitle: localHome.ctaTitle || 'Precisa de ajuda agora?',
+            ctaDescription: localHome.ctaText || '',
+            ctaButtonText: localHome.ctaButtonText || 'Chamar no WhatsApp',
+        };
+    }
+} else {
+    const activeThemeId = settings?.data?.activeTheme || 'classic';
+    data = await readSingleton('about', activeThemeId);
+}
+
+const siteName = isLocal ? ((await readSingleton('home', 'local'))?.companyName || 'Site') : 'CNX Agency';
 ---
 
-<MainLayout title={`${data?.heroTitle || 'Sobre Nós'} - CNX Agency`}>
+{isLocal ? (
+    <LocalSobre data={data || {}} siteName={siteName} />
+) : (
+<MainLayout title={`${data?.heroTitle || 'Sobre Nós'} - ${siteName}`}>
     
     <!-- HERO SECTION -->
     <section class="relative min-h-[70vh] flex items-center justify-center pt-24 md:pt-32 overflow-hidden">
@@ -188,3 +236,4 @@ const data = await readSingleton('about', activeThemeId);
     )}
 
 </MainLayout>
+)}

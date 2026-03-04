@@ -4,6 +4,36 @@ Todas as mudanças relevantes do template são documentadas aqui.
 
 ---
 
+## [1.0.1] — 05/03/2026
+
+### Melhorias
+
+- Checklist de onboarding com item "Ativar atualizações automáticas"
+- ConfigStatus reforçado com urgência do workflow (obrigatório)
+- Central de Ajuda com passo 3 mais explícito (obrigatório)
+- Setup e Login com avisos sobre ativação do workflow
+- API e Banner de atualização com mensagens de erro amigáveis e link para GitHub
+- Changelog em Configurações (página separada)
+- README atualizado e simplificado para usuários leigos
+
+### Correções
+
+- Breadcrumb: ao clicar no bairro, exibe página de serviços (antes caía em 404)
+
+### Conteúdo padrão
+
+- Modo Blog como padrão (siteMode: blog)
+- Bairros do RJ cadastrados como padrão (Copacabana, Ipanema, Leblon, Botafogo, Barra da Tijuca, Centro, Leme, Flamengo)
+- Template sem conteúdo motorhome; dados genéricos para começar vazio
+
+### Removido
+
+- Funcionalidade "Criar Tema com IA" (ThemeWizard e wizard completo)
+- Chave de API exposta em settings.yaml
+- Posts e pastas de lixo (_deleted, a-copia)
+
+---
+
 ## [1.0.0] — 25/02/2026
 
 ### Lançamento inicial

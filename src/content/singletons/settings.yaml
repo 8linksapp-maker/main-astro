@@ -1,3 +1,14 @@
 activeTheme: classic
 siteName: CNX Agency
 colorScheme: light
+siteMode: local
+aiProvider: openai
+aiApiKey: ""
+canonicalUrl: ""
+companyPhone: ""
+companyWhatsapp: ""
+generateSitemap: true
+generateRobots: true
+robotsDisallow:
+  - /admin
+  - /api

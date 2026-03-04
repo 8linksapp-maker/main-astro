@@ -1,8 +1,15 @@
 ---
+/**
+ * blog/[slug].astro
+ *
+ * Página individual de post.
+ * Usa layout conforme siteMode: local → LocalLayout (header/footer do modo local), blog → MainLayout.
+ * SSR para que o layout siga o siteMode em cada request.
+ */
+
 import { getCollection, getEntry, render } from 'astro:content';
 import BlogPost from '../../themes/classic/BlogPost.astro';
-
-export const prerender = true;
+import { readPost } from '../../utils/post-utils';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts');
@@ -13,20 +20,28 @@ export async function getStaticPaths() {
 }
 
 const { slug } = Astro.params;
-const post = await getEntry('posts', slug);
+const { post } = Astro.props;
 
-if (!post) {
-  return Astro.redirect('/404');
-}
+if (!post) return Astro.redirect('/404');
 
 const { Content } = await render(post);
-
 const author = post.data.author ? await getEntry('authors', post.data.author) : null;
+
+// Tempo de leitura: ~200 palavras/min em português
+const postFile = await readPost(post.data.slug);
+const wordCount = postFile?.content ? postFile.content.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length : 0;
+const readingTimeMinutes = Math.max(1, Math.ceil(wordCount / 200));
+
+const settings = await getEntry('siteSettings', 'settings').catch(() => null);
+const siteMode = settings?.data?.siteMode || 'blog';
+const layoutType = siteMode === 'local' ? 'local' : 'main';
 ---
 
-<BlogPost 
+<BlogPost
     post={post}
     author={author}
     Content={Content}
     themeId="classic"
+    layoutType={layoutType}
+    readingTimeMinutes={readingTimeMinutes}
 />

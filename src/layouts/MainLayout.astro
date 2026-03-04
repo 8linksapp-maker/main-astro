@@ -1,9 +1,17 @@
 ---
+/**
+ * MainLayout.astro
+ *
+ * Layout base para modo Blog/Agência (tema classic).
+ * Inclui canonical para SEO e indexação pelo Google.
+ */
+
 import { getEntry } from 'astro:content';
 import Header from '../themes/classic/components/Header.astro';
 import Footer from '../themes/classic/components/Footer.astro';
 import CookieConsent from '../components/CookieConsent.astro';
 import { readSingleton } from '../utils/singleton-utils';
+import { readSiteSettings } from '../utils/read-site-settings';
 import '../styles/global.css';
 import '@fontsource/inter';
 import '@fontsource/outfit';
@@ -22,7 +30,15 @@ const {
 
 const theme = await getEntry('siteThemes', 'classic');
 const siteSettings = await getEntry('siteSettings', 'settings').catch(() => null);
+const siteConfig   = await readSiteSettings();
 const colorScheme: 'dark' | 'light' = (siteSettings?.data?.colorScheme as 'dark' | 'light') || 'dark';
+
+// Canonical URL: preferir settings, fallback para URL da requisição
+const canonicalBase = (siteConfig.canonicalUrl as string)?.trim() || '';
+const pathname      = Astro.url.pathname.replace(/\/$/, '') || '/';
+const canonicalHref = canonicalBase
+    ? `${canonicalBase.replace(/\/$/, '')}${pathname === '/' ? '' : pathname}`
+    : Astro.url.origin + pathname;
 const pixelSettings = await readSingleton('pixels', 'classic').catch(() => null);
 const gaId = pixelSettings?.googleAnalyticsId || '';
 const fbPixelId = pixelSettings?.facebookPixelId || '';
@@ -54,6 +70,7 @@ const secondaryRGB = hexToRgb(secondaryColor);
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="canonical" href={canonicalHref} />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
         <meta name="description" content={description} />
