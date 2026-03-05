@@ -132,6 +132,55 @@ export default function SettingsAtualizacoes() {
         gap: '1.5rem',
       }}
     >
+      {/* Descrição e permissões GitHub — sempre visível */}
+      <div
+        style={{
+          padding: '1rem 1.25rem',
+          borderRadius: '10px',
+          background: 'rgba(99,102,241,0.06)',
+          border: '1px solid rgba(99,102,241,0.2)',
+        }}
+      >
+        <h3 style={{ fontSize: '0.9rem', fontWeight: 700, color: '#e5e5e5', marginBottom: '0.5rem' }}>
+          O que são atualizações?
+        </h3>
+        <p style={{ fontSize: '0.85rem', color: '#94a3b8', margin: 0, lineHeight: 1.6 }}>
+          O CNX lança melhorias regularmente. Quando houver novidade, um <strong style={{ color: '#fcd34d' }}>banner amarelo</strong> aparece no topo do painel com o botão <strong>"🔄 Aplicar agora"</strong>. Seu conteúdo (posts, imagens) não é alterado — só o código do template.
+        </p>
+      </div>
+
+      <div
+        style={{
+          padding: '1rem 1.25rem',
+          borderRadius: '10px',
+          background: 'rgba(251,191,36,0.06)',
+          border: '1px solid rgba(251,191,36,0.25)',
+        }}
+      >
+        <h3 style={{ fontSize: '0.9rem', fontWeight: 700, color: '#fcd34d', marginBottom: '0.5rem' }}>
+          ⚠️ Permissões do GitHub (obrigatório)
+        </h3>
+        <p style={{ fontSize: '0.85rem', color: '#e5e5e5', marginBottom: '0.75rem', lineHeight: 1.5 }}>
+          Para o workflow funcionar, ative as permissões no repositório:
+        </p>
+        <ol
+          style={{
+            margin: 0,
+            paddingLeft: '1.25rem',
+            fontSize: '0.85rem',
+            color: '#94a3b8',
+            lineHeight: 1.8,
+          }}
+        >
+          <li>Acesse o repositório no <a href="https://github.com" target="_blank" rel="noopener noreferrer" style={{ color: '#60a5fa', textDecoration: 'underline' }}>GitHub</a></li>
+          <li>Clique em <strong style={{ color: '#e5e5e5' }}>Settings</strong> (Configurações) — aba no topo</li>
+          <li>Menu esquerdo: <strong style={{ color: '#e5e5e5' }}>Actions</strong> → <strong style={{ color: '#e5e5e5' }}>General</strong></li>
+          <li>Em <strong style={{ color: '#e5e5e5' }}>Workflow permissions</strong>: marque <strong style={{ color: '#86efac' }}>Read and write permissions</strong></li>
+          <li>Marque <strong style={{ color: '#86efac' }}>Allow GitHub Actions to create and approve pull requests</strong></li>
+          <li>Clique em <strong style={{ color: '#86efac' }}>Save</strong></li>
+        </ol>
+      </div>
+
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
         <label
           style={{
@@ -255,7 +304,7 @@ export default function SettingsAtualizacoes() {
           }}
         >
           <p style={{ margin: '0 0 0.75rem', color: '#fcd34d', fontWeight: 600, fontSize: '0.9rem' }}>
-            O GitHub não permite criar este arquivo automaticamente. Crie manualmente em 3 passos:
+            Siga os passos:
           </p>
           <ol
             style={{
@@ -285,6 +334,11 @@ export default function SettingsAtualizacoes() {
               cole no editor do GitHub e clique em{' '}
               <strong style={{ color: '#86efac' }}>Commit new file</strong>
             </li>
+            <li>
+              Configure as permissões no GitHub: <strong style={{ color: '#e5e5e5' }}>Settings → Actions → General</strong> →
+              marque <strong style={{ color: '#86efac' }}>Read and write permissions</strong> e{' '}
+              <strong style={{ color: '#86efac' }}>Allow GitHub Actions to create and approve pull requests</strong> → <strong>Save</strong>
+            </li>
             <li>Volte aqui e clique em Ativar novamente</li>
           </ol>
           <div style={{ marginTop: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -312,6 +366,24 @@ export default function SettingsAtualizacoes() {
           </div>
         </div>
       )}
+
+      {/* Como atualizar manualmente — sempre visível */}
+      <div
+        style={{
+          padding: '1rem 1.25rem',
+          borderRadius: '10px',
+          background: 'rgba(255,255,255,0.02)',
+          border: '1px solid rgba(255,255,255,0.06)',
+        }}
+      >
+        <h3 style={{ fontSize: '0.9rem', fontWeight: 700, color: '#e5e5e5', marginBottom: '0.5rem' }}>
+          Como atualizar manualmente pelo GitHub
+        </h3>
+        <p style={{ fontSize: '0.85rem', color: '#94a3b8', margin: 0, lineHeight: 1.6 }}>
+          No repositório: aba <strong style={{ color: '#e5e5e5' }}>Actions</strong> →{' '}
+          <strong style={{ color: '#e5e5e5' }}>🔄 Atualizar Template CNX</strong> → <strong style={{ color: '#86efac' }}>Run workflow</strong>.
+        </p>
+      </div>
     </div>
   );
 }
