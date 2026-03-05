@@ -4,6 +4,15 @@ Todas as mudanças relevantes do template são documentadas aqui.
 
 ---
 
+## [1.0.3] — 06/03/2026
+
+### Teste de atualização
+
+- **Marca de verificação**: se você vê a versão **v1.0.3** no canto superior direito do painel admin, o fluxo de update funcionou corretamente.
+- Atualização do template com sucesso.
+
+---
+
 ## [1.0.2] — 05/03/2026
 
 ### Melhorias
