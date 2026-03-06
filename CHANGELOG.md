@@ -4,6 +4,17 @@ Todas as mudanças relevantes do template são documentadas aqui.
 
 ---
 
+## [1.0.11] — 06/03/2026
+
+### Melhorias
+
+- **Pexels**: campo de API Key em Configurações → IA & SEO para inserir imagens automaticamente nos posts gerados por IA
+- **Imagens em posts**: 1 imagem a cada ~400 palavras (máx. 5), busca no Pexels com título traduzido para inglês
+- **Thumbnail automático**: primeira foto do Pexels usada como thumbnail e metaImage do post
+- **OpenAI**: teste de chave usa chat/completions (compatível com sk-proj-); suporte opcional a OPENAI_ORGANIZATION_ID e OPENAI_PROJECT_ID no .env
+
+---
+
 ## [1.0.10] — 05/03/2026
 
 ### Melhorias
