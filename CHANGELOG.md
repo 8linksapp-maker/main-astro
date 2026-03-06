@@ -4,6 +4,18 @@ Todas as mudanças relevantes do template são documentadas aqui.
 
 ---
 
+## [1.0.12] — 06/03/2026
+
+### Melhorias
+
+- **Leads**: novo módulo no CMS para listar todos os leads gerados pelos formulários do site
+  - Página `/admin/leads` com tabela (Data, Nome, Contato, Origem, Mensagem)
+  - Formulários conectados: Contato (Classic), Contato (Local), Sidebar de Serviço
+  - Armazenamento em `data/leads.json` (local) ou via GitHub API em produção
+  - APIs: `POST /api/leads` (público) e `GET /api/admin/leads` (protegido)
+
+---
+
 ## [1.0.11] — 06/03/2026
 
 ### Melhorias
