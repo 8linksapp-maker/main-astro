@@ -155,7 +155,7 @@ const siteName = isLocal ? ((await readSingleton('home', 'local'))?.companyName 
                 <div class="p-8 md:p-12 rounded-2xl bg-white/5 border border-white/10 hover:border-primary/50 transition-all">
                     <h2 class="text-3xl font-heading font-bold text-white mb-8">{data?.formTitle || 'Envie sua Mensagem'}</h2>
                     
-                    <form class="space-y-6" id="contact-form">
+                    <form class="space-y-6" id="contact-form" onsubmit="return false;">
                         <div>
                             <label for="name" class="block text-sm font-semibold text-slate-300 mb-2">Nome</label>
                             <input 
@@ -270,6 +270,7 @@ const siteName = isLocal ? ((await readSingleton('home', 'local'))?.companyName 
             const message = (form.querySelector('[name="message"]') as HTMLTextAreaElement)?.value?.trim() || '';
 
             formMessage.classList.remove('hidden', 'bg-red-500/20', 'border-red-500/40', 'bg-green-500/20', 'border-green-500/40', 'text-green-400');
+            formMessage.style.display = 'block';
             formMessage.textContent = 'Enviando...';
             submitBtn?.setAttribute('disabled', 'true');
 

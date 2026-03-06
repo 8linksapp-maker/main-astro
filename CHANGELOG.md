@@ -4,6 +4,17 @@ Todas as mudanças relevantes do template são documentadas aqui.
 
 ---
 
+## [1.0.13] — 06/03/2026
+
+### Correções
+
+- **Leads**: correções no salvamento de formulários de contato
+  - readLeadsFile aceita formatos `[]` e `{"leads":[]}`; fallback quando arquivo não existe no GitHub
+  - Formulários com `onsubmit="return false"` para evitar envio tradicional
+  - Mensagem de feedback exibida corretamente (display block)
+
+---
+
 ## [1.0.12] — 06/03/2026
 
 ### Melhorias

@@ -39,18 +39,21 @@ function generateId(): string {
 
 async function readLeadsFile(): Promise<Lead[]> {
     try {
+        let content: string;
         if (isGitHubConfigured()) {
             const file = await githubReadFile(LEADS_GH_PATH);
-            if (file) {
-                const parsed = JSON.parse(file.content) as { leads?: Lead[] };
-                return Array.isArray(parsed.leads) ? parsed.leads : [];
-            }
+            content = file?.content ?? '{"leads":[]}';
         } else {
-            const content = await fs.readFile(LEADS_PATH, 'utf-8');
-            const parsed = JSON.parse(content) as { leads?: Lead[] };
-            return Array.isArray(parsed.leads) ? parsed.leads : [];
+            content = await fs.readFile(LEADS_PATH, 'utf-8');
         }
-    } catch {
+        const parsed = JSON.parse(content) as unknown;
+        if (Array.isArray(parsed)) return parsed as Lead[];
+        if (parsed && typeof parsed === 'object' && Array.isArray((parsed as { leads?: unknown }).leads)) {
+            return (parsed as { leads: Lead[] }).leads;
+        }
+        return [];
+    } catch (e) {
+        console.error('\x1b[31m✗ Erro ao ler leads:\x1b[0m', e);
         return [];
     }
 }
