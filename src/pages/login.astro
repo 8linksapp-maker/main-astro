@@ -132,7 +132,7 @@ import '../styles/global.css';
                         window.location.href = '/dashboard';
                     } else {
                         const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-                            redirectTo: `${window.location.origin}/dashboard`,
+                            redirectTo: `${window.location.origin}/update-password`,
                         });
                         if (error) throw error;
                         
