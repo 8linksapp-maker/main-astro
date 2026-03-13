@@ -277,11 +277,18 @@
 	</section>
 
 	<style is:global>
-		/* Estabiliza a animação de revelação do Hero */
+		/* Estabiliza a animação de revelação do Hero e ajusta a imagem focando na esquerda */
 		.slider-one .swiper-slide-active .slider-one_image {
 			clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%) !important;
 			opacity: 1 !important;
 			visibility: visible !important;
+		}
+
+		.slider-one_image img {
+			width: 100% !important;
+			height: 600px !important;
+			object-fit: cover !important;
+			object-position: left top !important; /* Foca no canto superior esquerdo */
 		}
 	</style>
 	<!-- End Main Slider Section -->
