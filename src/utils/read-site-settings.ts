@@ -1,6 +1,6 @@
 export async function readSiteSettings(): Promise<any> {
     return {
-        siteName: 'Main Astro',
+        siteName: 'Main CNX',
         canonicalUrl: '',
         generateSitemap: true,
         generateRobots: true,

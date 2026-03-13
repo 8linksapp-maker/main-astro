@@ -1,11 +1,11 @@
-# Main Astro - JAMstack SaaS Dashboard
+# Main CNX - JAMstack SaaS Dashboard
 
-Bem-vindo ao **Main Astro**, a plataforma definitiva para gestão, automação e deploy de sites JAMstack de alta performance.
+Bem-vindo ao **Main CNX**, a plataforma definitiva para gestão, automação e deploy de sites JAMstack de alta performance.
 
-## 🚀 O que é o Main Astro?
-O Main Astro é um Painel de Controle (SaaS) projetado para empreendedores e desenvolvedores que buscam velocidade máxima, segurança absoluta e SEO imbatível para seus projetos web. 
+## 🚀 O que é o Main CNX?
+O Main CNX é um Painel de Controle (SaaS) projetado para empreendedores e desenvolvedores que buscam velocidade máxima, segurança absoluta e SEO imbatível para seus projetos web. 
 
-Com integração nativa à **Vercel** e **Supabase**, o Main Astro permite que você gerencie toda a sua infraestrutura de sites a partir de uma interface única e moderna.
+Com integração nativa à **Vercel** e **Supabase**, o Main CNX permite que você gerencie toda a sua infraestrutura de sites a partir de uma interface única e moderna.
 
 ## ✨ Principais Funcionalidades
 - **Gestão de Projetos**: Controle total sobre seus sites hospedados na Vercel.
@@ -50,4 +50,4 @@ Com integração nativa à **Vercel** e **Supabase**, o Main Astro permite que v
    ```
 
 ---
-*Main Astro — A Nova Era do Desenvolvimento Web.*
+*Main CNX — A Nova Era do Desenvolvimento Web.*

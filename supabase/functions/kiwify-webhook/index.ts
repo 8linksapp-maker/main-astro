@@ -65,10 +65,14 @@ serve(async (req) => {
                 // 2. DISPARO DO E-MAIL DE ACESSO (Via Reset Password)
                 // O usuário recebe o e-mail oficial para escolher a senha e já entra no sistema.
                 console.log(`Enviando e-mail de acesso via Reset Password...`);
+
+                // URL correta conforme seu ambiente no Vercel (Migrado para MAIN CNX)
+                const redirectURL = 'https://main-cnx.vercel.app/update-password';
+
                 await supabaseAdmin.auth.resetPasswordForEmail(customerEmail, {
-                    // AJUSTE: Mude para a URL do seu site em produção
-                    redirectTo: `https://${new URL(supabaseUrl).hostname.replace('.supabase.co', '')}.vercel.app/update-password`,
+                    redirectTo: redirectURL,
                 });
+                console.log(`Reset e-mail enviado. Redirecionamento configurado para: ${redirectURL}`);
             }
 
             // 3. Garantir Perfil e Data de Expiração na tabela 'profiles'
