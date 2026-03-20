@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section1Hero from '../components/sections/Section1Hero.astro';
+import Section2Differentiators from '../components/sections/Section2Differentiators.astro';
+import Section3About from '../components/sections/Section3About.astro';
+import Section4Services from '../components/sections/Section4Services.astro';
+import Section5Testimonials from '../components/sections/Section5Testimonials.astro';
+import Section6Contact from '../components/sections/Section6Contact.astro';
+import home from '../data/home.json';
+---
+
+<BaseLayout>
+  <Section1Hero {...home.hero} />
+  <Section2Differentiators {...home.differentiators} />
+  <Section3About {...home.about} />
+  <Section4Services {...home.services} />
+  <Section5Testimonials {...home.testimonials} />
+  <Section6Contact {...home.contact} />
+</BaseLayout>

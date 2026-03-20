@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import sobreData from '../data/sobre.json';
+import siteConfig from '../data/siteConfig.json';
+---
+
+<BaseLayout 
+  title={sobreData.seo?.title || "Sobre Nós"} 
+  description={sobreData.seo?.description}
+  image={sobreData.seo?.image}
+>
+  <section class="py-24 px-4 bg-white">
+    <div class="max-w-3xl mx-auto">
+      <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-12 text-center">
+        {sobreData.hero.title}
+      </h1>
+
+      <img src={sobreData.hero.image} alt={sobreData.hero.title} class="w-full h-[400px] object-cover rounded-3xl shadow-xl mb-16" />
+
+      <div class="prose prose-lg prose-slate max-w-none">
+        <p class="text-xl text-slate-600 leading-relaxed mb-8">
+          {sobreData.hero.desc}
+        </p>
+        
+        <h2>{sobreData.content.missionTitle}</h2>
+        <p>
+          {sobreData.content.missionText}
+        </p>
+
+        <h2>{sobreData.content.teamTitle}</h2>
+        <p>
+          {sobreData.content.teamText}
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

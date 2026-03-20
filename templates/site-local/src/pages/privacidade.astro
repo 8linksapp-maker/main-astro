@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import siteConfig from '../data/siteConfig.json';
+---
+
+<BaseLayout title="Política de Privacidade" description="Saiba como protegemos seus dados.">
+  <section class="py-24 px-4 bg-white">
+    <div class="max-w-3xl mx-auto prose prose-lg prose-slate prose-primary">
+      <h1 class="text-4xl md:text-5xl font-black text-slate-900 mb-8 tracking-tight">Política de Privacidade</h1>
+      <p class="text-slate-500 mb-12">Última atualização: {siteConfig.legal.privacy_last_updated}</p>
+
+      <h2>Proteção de Dados Pessoais</h2>
+      <p>Na {siteConfig.contact.name}, levamos sua privacidade a sério. Coletamos apenas os dados necessários para o atendimento via formulário ou WhatsApp.</p>
+      
+      <h2>Cookies</h2>
+      <p>Utilizamos cookies essenciais para o funcionamento do site e análises básicas de tráfego.</p>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,90 @@
+{
+    "hero": {
+        "tag": "Confiança e Agilidade",
+        "title": "Soluções Prontas para Você e sua Empresa",
+        "desc": "Atendimento especializado com quem entende do assunto. Garantimos qualidade e compromisso em cada entrega.",
+        "btnServicesText": "Nossos Serviços",
+        "btnServicesLink": "/servicos",
+        "btnWhatsappText": "Chamar no WhatsApp",
+        "btnWhatsappLink": "https://wa.me/5511999999999?text=Olá, gostaria de um orçamento",
+        "bgImage": "https://images.unsplash.com/photo-1521737711867-e3b97375f902?q=80&w=1974&auto=format&fit=crop"
+    },
+    "differentiators": {
+        "tag": "Por que nos escolher?",
+        "title": "O que nos torna referência",
+        "items": [
+            {
+                "icon": "Shield",
+                "title": "Segurança Total",
+                "desc": "Trabalhamos dentro de todas as normas de segurança e qualidade."
+            },
+            {
+                "icon": "Users",
+                "title": "Equipe Própria",
+                "desc": "Profissionais treinados e prontos para o atendimento."
+            },
+            {
+                "icon": "TrendingUp",
+                "title": "Melhor Preço",
+                "desc": "Otimizamos processos para oferecer o melhor custo para você."
+            }
+        ]
+    },
+    "about": {
+        "tag": "Conheça nossa História",
+        "title": "+10 Anos de Experiência no Mercado Local",
+        "desc": "Nascemos com o propósito de facilitar a vida de nossos clientes, oferecendo serviços essenciais com transparência e ética em cada etapa do processo.",
+        "image": "https://images.unsplash.com/photo-1513128034602-7814ccaddd4e?q=80&w=1935&auto=format&fit=crop",
+        "miniCards": [
+            "Atendimento 24h",
+            "Peças Originais",
+            "Garantia Total",
+            "Orçamento Rápido"
+        ],
+        "btnText": "Saiba Mais Sobre Nós",
+        "btnLink": "/sobre"
+    },
+    "services": {
+        "title": "Nossas Soluções",
+        "desc": "Confira os principais serviços que prestamos na região com foco em eficiência e economia.",
+        "items": [
+            {
+                "image": "https://images.unsplash.com/photo-1581578731522-9b7d718693fe?q=80&w=2070&auto=format&fit=crop",
+                "title": "Locação de Equipamentos",
+                "desc": "Aluguel completo de estruturas para obras e eventos com manutenção garantida.",
+                "link": "/servicos/locacao-equipamentos"
+            },
+            {
+                "image": "https://images.unsplash.com/photo-1581092160562-40aa08e78837?q=80&w=2070&auto=format&fit=crop",
+                "title": "Manutenção Técnica",
+                "desc": "Equipe especializada em reparos preventivos e corretivos em qualquer local.",
+                "link": "/servicos/manutencao"
+            }
+        ],
+        "footerBtnText": "Ver Todos os Serviços",
+        "footerBtnLink": "/servicos"
+    },
+    "testimonials": {
+        "tag": "O que dizem nossos clientes",
+        "title": "Quem contratou, aprova",
+        "items": [
+            {
+                "text": "O serviço foi impecável. Entregaram antes do prazo e o atendimento via WhatsApp foi muito rápido.",
+                "name": "Ricardo Silva",
+                "role": "Organizador de Eventos",
+                "image": "https://i.pravatar.cc/150?u=rs"
+            },
+            {
+                "text": "Preço justo e equipamentos novos. Com certeza voltaremos a contratar para as próximas obras.",
+                "name": "Ana Paula",
+                "role": "Engenheira Civil",
+                "image": "https://i.pravatar.cc/150?u=ap"
+            }
+        ]
+    },
+    "contact": {
+        "title": "Solicite seu Orçamento Grátis",
+        "desc": "Preencha o formulário ou chame no WhatsApp. Nossa equipe entrará em contato em menos de 15 minutos.",
+        "btnSubmitText": "Enviar Solicitação"
+    }
+}

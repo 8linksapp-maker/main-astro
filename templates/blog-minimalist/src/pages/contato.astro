@@ -1,0 +1,78 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import siteConfig from '../data/siteConfig.json';
+import contatoData from '../data/contato.json';
+---
+
+<BaseLayout 
+  title={contatoData.seo?.title || "Contato"} 
+  description={contatoData.seo?.description}
+  image={contatoData.seo?.image}
+>
+  <section class="py-24 px-4 bg-slate-50 min-h-[80vh]">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+        
+        <!-- NAP & Info -->
+        <div>
+          <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-8">{contatoData.hero.title}</h1>
+          <p class="text-lg text-slate-600 mb-12 max-w-md">
+            {contatoData.hero.subtitle}
+          </p>
+
+          <div class="space-y-8">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+              <h3 class="font-bold text-slate-900 mb-4 tracking-tight uppercase text-xs">{contatoData.cards.napTitle}</h3>
+              <div class="space-y-4">
+                <div class="flex items-start gap-4">
+                  <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-600 mt-1">🏠</div>
+                  <div>
+                    <p class="font-bold text-slate-900">{siteConfig.contact.name}</p>
+                    <p class="text-slate-600 text-sm leading-relaxed">{siteConfig.contact.address}</p>
+                    <p class="text-slate-500 text-[10px] mt-1 uppercase tracking-wide">{contatoData.cards.addressLabel}</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-4">
+                  <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-600 mt-1">📞</div>
+                  <div>
+                    <p class="font-bold text-slate-900">{siteConfig.contact.phone}</p>
+                    <p class="text-slate-600 text-sm">{contatoData.cards.phoneLabel}</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-4">
+                  <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-600 mt-1">✉️</div>
+                  <div>
+                    <p class="font-bold text-slate-900">{siteConfig.contact.email}</p>
+                    <p class="text-slate-600 text-sm">{contatoData.cards.emailLabel}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form -->
+        <div class="bg-white p-10 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100">
+          <form class="space-y-6">
+            <div>
+              <label for="name" class="block text-sm font-bold text-slate-700 mb-2">Nome Completo</label>
+              <input type="text" id="name" placeholder="Ex: João Silva" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all outline-none" required />
+            </div>
+            <div>
+              <label for="email" class="block text-sm font-bold text-slate-700 mb-2">E-mail Corporativo</label>
+              <input type="email" id="email" placeholder="joao@exemplo.com" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all outline-none" required />
+            </div>
+            <div>
+              <label for="message" class="block text-sm font-bold text-slate-700 mb-2">Mensagem</label>
+              <textarea id="message" rows="4" placeholder="Como podemos te ajudar?" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all outline-none resize-none" required></textarea>
+            </div>
+            <button type="submit" class="w-full px-8 py-4 rounded-xl bg-primary-600 text-white font-bold hover:bg-primary-700 transition-all shadow-lg shadow-primary-500/30">
+              {contatoData.cards.formSubmitText}
+            </button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,104 @@
+---
+/**
+ * CmsLayout.astro
+ * Layout exclusivo para o Gerenciador de Conteúdo (Wordpress-style)
+ */
+import '../styles/global.css';
+import CmsToaster from '../components/admin/cms/CmsToaster.tsx';
+
+interface Props {
+    title?: string;
+    siteId: string;
+    siteName: string;
+    repoName: string;
+}
+
+const { title = "CMS", siteId, siteName, repoName } = Astro.props;
+
+// Componentes da Sidebar exclusiva do Site
+const navItems = [
+    { label: "Painel Geral", icon: "📊", href: `/dashboard/cms/${siteId}` },
+    { label: "Configurações", icon: "⚙️", href: `/dashboard/cms/${siteId}/config` },
+    { label: "Páginas Estruturais", icon: "🎨", href: `/dashboard/cms/${siteId}/pages` },
+    { label: "Artigos do Blog", icon: "📝", href: `/dashboard/cms/${siteId}/posts` },
+    { label: "Categorias", icon: "🏷️", href: `/dashboard/cms/${siteId}/categories` },
+    { label: "Equipe Editora", icon: "👥", href: `/dashboard/cms/${siteId}/authors` },
+];
+---
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans min-h-screen">
+    <!-- Base App Wrapper -->
+    <div class="flex-1 w-full flex flex-col md:flex-row min-h-screen">
+        
+        <!-- CMS Sidebar (Dark Mode Themed) -->
+        <aside class="w-64 bg-slate-900 border-r border-slate-800 hidden md:flex flex-col shrink-0 shadow-2xl z-20">
+            <div class="h-16 flex items-center px-6 border-b border-white/10 bg-black/20">
+                <span class="font-bold text-lg text-white truncate flex items-center gap-2">
+                    <span class="text-violet-500">✨</span> {siteName}
+                </span>
+            </div>
+
+            <!-- Botão de Voltar para a Nave-Mãe (CNX) -->
+            <div class="px-4 py-4 border-b border-white/5">
+                <a href="/dashboard/cms" class="flex items-center justify-center gap-2 text-sm font-semibold text-slate-400 bg-white/5 hover:bg-white/10 hover:text-white py-2 rounded-lg transition-all border border-white/5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                    Sair do Editor
+                </a>
+            </div>
+            
+            <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+                <div class="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-3 mb-3">Menu do Site</div>
+                {navItems.map(item => (
+                    <a 
+                        href={item.href}
+                        class={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
+                            Astro.url.pathname === item.href || (item.href !== `/dashboard/cms/${siteId}` && Astro.url.pathname.startsWith(item.href))
+                                ? 'bg-violet-600 text-white font-bold shadow-md shadow-violet-900/50' 
+                                : 'text-slate-400 hover:bg-white/5 hover:text-white font-medium'
+                        }`}
+                    >
+                        <span class="text-lg opacity-80">{item.icon}</span>
+                        <span class="text-sm tracking-wide">{item.label}</span>
+                    </a>
+                ))}
+            </nav>
+
+            <!-- Status do Repositório -->
+            <div class="p-4 border-t border-white/10 bg-black/10">
+                <div class="flex items-center gap-2 text-xs text-slate-500 font-mono truncate">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+                    {repoName}
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content wrapper -->
+        <div class="flex-1 flex-col min-w-0 bg-slate-50/50">
+            <!-- Header Simples Desktop (Opcional, minimalista) -->
+            <header class="h-16 bg-white/80 backdrop-blur-md border-b border-slate-200 flex items-center justify-between px-4 sm:px-8 sticky top-0 z-10">
+                <h1 class="font-bold text-slate-700 hidden sm:block">Gerenciador de Conteúdo CMS</h1>
+                <div class="flex items-center gap-3">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Sincronizado via GitHub</span>
+                </div>
+            </header>
+
+            <!-- Main Content Area -->
+            <main class="flex-1 p-4 sm:p-8 lg:p-10 overflow-y-auto w-full">
+                <slot />
+            </main>
+        </div>
+        
+    </div>
+    
+    <!-- Global Toast Notifier for CMS Actions (Git Push/Deploy) -->
+    <CmsToaster client:load />
+</body>
+</html>

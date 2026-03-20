@@ -1,0 +1,36 @@
+---
+import CmsFullscreenLayout from '../../../../../layouts/CmsFullscreenLayout.astro';
+import ContatoEditorReact from '../../../../../components/admin/cms/ContatoEditor';
+import { supabaseSSR } from '../../../../../lib/supabaseSSR';
+
+const { id } = Astro.params;
+const supabase = supabaseSSR(Astro);
+const { data: { user } } = await supabase.auth.getUser();
+
+if (!user) {
+    return Astro.redirect('/login');
+}
+
+const { data: site, error: siteError } = await supabase
+    .from('sites_cms')
+    .select('*')
+    .eq('id', id)
+    .single();
+
+if (!site || siteError) {
+    return Astro.redirect('/dashboard/cms');
+}
+
+const siteUrl = site.url || `https://${site.repo_name.toLowerCase()}.vercel.app`;
+---
+
+<CmsFullscreenLayout title={`Editar Página: Contato - ${site.name}`}>
+    <div class="w-full relative min-h-screen bg-slate-100/50">
+        <ContatoEditorReact 
+            client:only="react" 
+            siteId={site.id} 
+            repoName={site.repo_name}
+            siteUrl={siteUrl + "/contato"} 
+        />
+    </div>
+</CmsFullscreenLayout>

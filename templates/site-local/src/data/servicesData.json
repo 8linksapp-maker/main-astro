@@ -1,0 +1,48 @@
+{
+    "hero": {
+        "tag": "Serviços Locais de Qualidade",
+        "title": "Soluções Confiáveis para o seu Dia a Dia",
+        "desc": "Atendimento rápido, profissionais qualificados e o melhor custo-benefício da região para você ou sua empresa."
+    },
+    "services": [
+        {
+            "tag": "Disponibilidade Imediata",
+            "title": "Locação de Equipamentos",
+            "desc": "Equipamentos modernos e higienizados para eventos, obras ou uso residencial. Entrega e retirada no local com agilidade.",
+            "image": "https://images.unsplash.com/photo-1581578731522-9b7d718693fe?q=80&w=2070&auto=format&fit=crop",
+            "highlights": [
+                "Entrega Rápida",
+                "Manutenção Inclusa",
+                "Suporte 24h",
+                "Preços Flexíveis"
+            ],
+            "link": "/servicos/locacao-equipamentos"
+        },
+        {
+            "tag": "Especialistas",
+            "title": "Manutenção Preventiva",
+            "desc": "Evite problemas maiores com nossa revisão completa. Técnicos certificados e garantia total em todos os serviços prestados.",
+            "image": "https://images.unsplash.com/photo-1581092160562-40aa08e78837?q=80&w=2070&auto=format&fit=crop",
+            "highlights": [
+                "Garantia de 90 dias",
+                "Peças Originais",
+                "Orçamento Gratuito",
+                "Atendimento Domiciliar"
+            ],
+            "link": "/servicos/manutencao"
+        }
+    ],
+    "faq": {
+        "title": "Perguntas Comuns",
+        "items": [
+            {
+                "question": "Como faço para solicitar um orçamento?",
+                "answer": "Você pode clicar no botão do WhatsApp ou preencher o formulário abaixo. Respondemos em menos de 15 minutos em horário comercial."
+            },
+            {
+                "question": "Vocês atendem em quais regiões?",
+                "answer": "Atendemos toda a região metropolitana e cidades vizinhas em um raio de até 50km da nossa sede."
+            }
+        ]
+    }
+}

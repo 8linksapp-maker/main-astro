@@ -1,0 +1,27 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const posts = await getCollection('blog');
+---
+
+<BaseLayout title="Blog" description="Acompanhe nossas últimas novidades e dicas.">
+  <section class="py-32 px-4 bg-slate-50">
+    <div class="max-w-7xl mx-auto">
+      <h1 class="text-5xl md:text-7xl font-black text-slate-900 mb-20 tracking-tight">Blog</h1>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+        {posts.map((post) => (
+          <article class="bg-white rounded-[2.5rem] overflow-hidden shadow-sm border border-slate-100 hover:shadow-xl transition-all">
+            <img src={post.data.image} alt={post.data.title} class="aspect-video object-cover" />
+            <div class="p-10">
+              <span class="text-primary-600 font-bold text-xs uppercase tracking-widest">{post.data.category}</span>
+              <h2 class="text-2xl font-bold mt-4 mb-6 leading-tight">{post.data.title}</h2>
+              <a href={`/blog/${post.id.replace('.md', '')}`} class="text-slate-900 font-bold hover:text-primary-600">Ler mais →</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

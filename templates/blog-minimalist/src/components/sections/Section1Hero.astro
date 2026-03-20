@@ -1,0 +1,80 @@
+---
+interface Props {
+  title: string;
+  subtitle: string;
+  btnText: string;
+  btnLink: string;
+  bgImage: string;
+  titleSize?: string;
+}
+
+const { title, subtitle, btnText, btnLink, bgImage, titleSize = 'xlarge' } = Astro.props;
+
+// Mapeamento cravado p/ evitar que o PurgeCSS do Vercel mate as classes dinâmicas
+const sizeMap: Record<string, string> = {
+  small: 'text-4xl md:text-5xl',
+  normal: 'text-5xl md:text-6xl',
+  large: 'text-6xl md:text-7xl',
+  xlarge: 'text-6xl md:text-8xl', // default base orginal
+  giant: 'text-7xl md:text-[7rem]'
+};
+
+const selectedTitleSize = sizeMap[titleSize] || sizeMap['xlarge'];
+---
+
+<section class="relative min-h-screen flex items-center justify-center px-4 overflow-hidden bg-slate-950">
+  <!-- Imagem de Fundo com Overlay -->
+  <div class="absolute inset-0 z-0">
+    <img 
+      src={bgImage} 
+      alt="Background" 
+      class="w-full h-full object-cover opacity-40"
+    />
+    <div class="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-950/20 to-slate-950"></div>
+    <div class="absolute inset-0 bg-gradient-to-r from-primary-600/20 to-transparent"></div>
+  </div>
+
+  <!-- Elementos Decorativos (Blur) -->
+  <div class="absolute top-1/4 -left-20 w-96 h-96 bg-primary-600/30 rounded-full blur-[120px] pointer-events-none"></div>
+  <div class="absolute bottom-1/4 -right-20 w-96 h-96 bg-blue-600/20 rounded-full blur-[120px] pointer-events-none"></div>
+
+  <div class="max-w-5xl mx-auto relative z-10 text-center">
+    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white text-sm font-medium mb-8 backdrop-blur-md">
+      <span class="w-2 h-2 rounded-full bg-primary-500 animate-pulse"></span>
+      Conteúdo Atualizado Diariamente
+    </div>
+    
+    <h1 class={`${selectedTitleSize} font-black text-white tracking-tight mb-8 leading-[0.95] drop-shadow-2xl transition-all duration-300 break-words`}>
+      {title}
+    </h1>
+    
+    <p class="text-xl md:text-2xl text-slate-300 mb-12 max-w-2xl mx-auto leading-relaxed font-medium">
+      {subtitle}
+    </p>
+    
+    <div class="flex items-center justify-center">
+      <a href={btnLink} class="group relative px-10 py-5 rounded-2xl bg-primary-600 text-white font-bold text-xl hover:bg-primary-500 transition-all shadow-2xl shadow-primary-500/40 hover:-translate-y-1 overflow-hidden text-center">
+        <span class="relative z-10">{btnText}</span>
+        <div class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:animate-shimmer"></div>
+      </a>
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 animate-bounce opacity-50">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7-7-7" />
+      </svg>
+    </div>
+  </div>
+</section>
+
+<style>
+  @keyframes shimmer {
+    100% {
+      transform: translateX(100%);
+    }
+  }
+  .animate-shimmer {
+    animation: shimmer 2s infinite;
+  }
+</style>

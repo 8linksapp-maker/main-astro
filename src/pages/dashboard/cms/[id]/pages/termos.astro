@@ -1,0 +1,27 @@
+---
+import CmsFullscreenLayout from '../../../../../layouts/CmsFullscreenLayout.astro';
+import { supabaseSSR } from '../../../../../lib/supabaseSSR';
+import TermosEditor from '../../../../../components/admin/cms/TermosEditor.tsx';
+
+const { id } = Astro.params;
+const supabase = supabaseSSR(Astro);
+const { data: { user } } = await supabase.auth.getUser();
+
+if (!user) {
+    return Astro.redirect('/login');
+}
+
+const { data: site, error: siteError } = await supabase
+    .from('sites_cms')
+    .select('*')
+    .eq('id', id)
+    .single();
+
+if (!site || siteError) {
+    return Astro.redirect('/dashboard/cms');
+}
+---
+
+<CmsFullscreenLayout title={`Termos de Uso: ${site.company_name} | CMS`}>
+    <TermosEditor client:load siteId={id as string} repoName={site.repo_name} siteUrl={site.url} />
+</CmsFullscreenLayout>

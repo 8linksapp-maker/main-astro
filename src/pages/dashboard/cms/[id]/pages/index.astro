@@ -1,0 +1,106 @@
+---
+import CmsLayout from '../../../../../layouts/CmsLayout.astro';
+import { supabaseSSR } from '../../../../../lib/supabaseSSR';
+import { LayoutTemplate, Info, Phone, ArrowRight, ShieldCheck } from 'lucide-react';
+
+const { id } = Astro.params;
+const supabase = supabaseSSR(Astro);
+const { data: { user } } = await supabase.auth.getUser();
+
+if (!user) {
+    return Astro.redirect('/login');
+}
+
+const { data: site, error: siteError } = await supabase
+    .from('sites_cms')
+    .select('*')
+    .eq('id', id)
+    .single();
+
+if (!site || siteError) {
+    return Astro.redirect('/dashboard/cms');
+}
+
+// Futuramente, a leitura das rotas disponíveis pode vir remotamente do Astro. 
+// Mas na versão 1.0, simularemos as clássicas.
+const basePages = [
+    { name: 'Página Inicial (Home)', slug: 'home', icon: LayoutTemplate, status: 'Ativa', color: 'emerald' },
+    { name: 'Página Sobre Nós', slug: 'sobre', icon: Info, status: 'Ativa', color: 'emerald' },
+    { name: 'Página de Contatos', slug: 'contato', icon: Phone, status: 'Ativa', color: 'emerald' },
+    { name: 'Política de Privacidade', slug: 'privacidade', icon: ShieldCheck, status: 'Ativa', color: 'blue' },
+    { name: 'Termos de Uso', slug: 'termos', icon: ShieldCheck, status: 'Ativa', color: 'blue' }
+];
+---
+
+<CmsLayout title={`Páginas Estruturais: ${site.company_name} | CMS CNX`} siteId={id as string} siteName={site.company_name} repoName={site.repo_name}>
+    <div class="flex items-center gap-4 mb-10">
+        <div>
+            <h2 class="text-3xl font-black text-slate-900 mb-2 tracking-tight">Páginas de Estrutura</h2>
+            <p class="text-slate-500 font-medium text-lg">Qual página fixa do site você deseja editar agora?</p>
+        </div>
+    </div>
+
+    <!-- Tabela de Sub-Páginas -->
+    <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-50 border-b border-slate-200">
+                        <th class="py-4 px-6 text-xs font-bold text-slate-500 uppercase tracking-wider">Página Estrutural</th>
+                        <th class="py-4 px-6 text-xs font-bold text-slate-500 uppercase tracking-wider">Rota / URL</th>
+                        <th class="py-4 px-6 text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th>
+                        <th class="py-4 px-6 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Ações Rápidas</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    {basePages.map((page) => (
+                        <tr class={`hover:bg-slate-50 transition-colors group relative ${page.status !== 'Ativa' ? 'opacity-60 grayscale' : ''}`}>
+                            <td class="py-4 px-6">
+                                <div class="flex items-center gap-4">
+                                    <div class={`w-10 h-10 rounded-lg bg-${page.color}-50 text-${page.color}-600 flex items-center justify-center shrink-0`}>
+                                        <page.icon className="w-5 h-5"/>
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-slate-800 text-base">{page.name}</p>
+                                        {page.status === 'Ativa' ? (
+                                            <p class="text-xs font-medium text-slate-500 mt-0.5">Editor dinâmico disponível</p>
+                                        ) : (
+                                            <p class="text-xs font-medium text-slate-400 mt-0.5">Disponível em breve</p>
+                                        )}
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-4 px-6">
+                                <span class="bg-slate-100 text-slate-600 px-3 py-1.5 rounded-lg text-sm font-mono font-medium">
+                                    /{page.slug === 'home' ? '' : page.slug}
+                                </span>
+                            </td>
+                            <td class="py-4 px-6">
+                                {page.status === 'Ativa' ? (
+                                    <span class="inline-flex items-center gap-1.5 bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-full text-xs font-black uppercase tracking-wider">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Publicada
+                                    </span>
+                                ) : (
+                                    <span class="inline-flex items-center gap-1.5 bg-slate-100 text-slate-500 px-3 py-1.5 rounded-full text-xs font-black uppercase tracking-wider">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> Em Breve
+                                    </span>
+                                )}
+                            </td>
+                            <td class="py-4 px-6 text-right">
+                                {page.status === 'Ativa' ? (
+                                    <a href={`/dashboard/cms/${id}/pages/${page.slug}`} class={`inline-flex items-center gap-2 px-4 py-2 bg-${page.color}-50 hover:bg-${page.color}-100 border border-${page.color}-200 text-${page.color}-700 rounded-lg text-sm font-bold transition-colors shadow-sm`}>
+                                        Editar Layout <ArrowRight className="w-4 h-4" />
+                                    </a>
+                                ) : (
+                                    <button disabled class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 border border-slate-200 text-slate-400 rounded-lg text-sm font-bold cursor-not-allowed">
+                                        Bloqueada
+                                    </button>
+                                )}
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</CmsLayout>

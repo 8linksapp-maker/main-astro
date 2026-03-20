@@ -1,0 +1,50 @@
+---
+interface Service {
+  image: string;
+  title: string;
+  desc: string;
+  link: string;
+}
+
+interface Props {
+  title: string;
+  desc: string;
+  items: Service[];
+  footerBtnText: string;
+  footerBtnLink: string;
+}
+
+const { title, desc, items, footerBtnText, footerBtnLink } = Astro.props;
+---
+
+<section class="py-32 px-4 bg-white relative">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-20">
+      <h2 class="text-4xl md:text-6xl font-black text-slate-900 mb-6 tracking-tight leading-tight">{title}</h2>
+      <p class="text-xl text-slate-600 max-w-3xl mx-auto font-medium">{desc}</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-20">
+      {items.map((service) => (
+        <div class="group bg-white rounded-[2.5rem] overflow-hidden border border-slate-100 shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+          <div class="aspect-video overflow-hidden">
+            <img src={service.image} alt={service.title} class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+          </div>
+          <div class="p-10">
+            <h3 class="text-2xl font-bold text-slate-900 mb-4">{service.title}</h3>
+            <p class="text-slate-600 mb-8 leading-relaxed line-clamp-2">{service.desc}</p>
+            <a href={service.link} class="text-primary-600 font-bold flex items-center gap-2 group-hover:gap-4 transition-all">
+              Saber mais <span>→</span>
+            </a>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div class="text-center">
+      <a href={footerBtnLink} class="inline-flex items-center gap-3 px-10 py-5 rounded-2xl bg-slate-100 text-slate-900 font-bold text-xl hover:bg-slate-200 transition-all">
+        {footerBtnText}
+      </a>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,11 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section6Contact from '../components/sections/Section6Contact.astro';
+import home from '../data/home.json';
+---
+
+<BaseLayout title="Contato" description="Entre em contato conosco e peça seu orçamento.">
+  <div class="pt-20">
+    <Section6Contact {...home.contact} />
+  </div>
+</BaseLayout>

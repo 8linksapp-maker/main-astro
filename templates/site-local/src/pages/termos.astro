@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import siteConfig from '../data/siteConfig.json';
+---
+
+<BaseLayout title="Termos de Uso" description="Leia nossos termos de uso e condições.">
+  <section class="py-24 px-4 bg-white">
+    <div class="max-w-3xl mx-auto prose prose-lg prose-slate prose-primary">
+      <h1 class="text-4xl md:text-5xl font-black text-slate-900 mb-8 tracking-tight">Termos de Uso</h1>
+      <p class="text-slate-500 mb-12">Última atualização: {siteConfig.legal.terms_last_updated}</p>
+
+      <h2>1. Aceitação dos Termos</h2>
+      <p>Ao utilizar os serviços da {siteConfig.contact.name}, você concorda com os termos aqui descritos.</p>
+      <p>Estes termos regem o uso do site e a contratação de nossos serviços locais.</p>
+      
+      <h2>2. Responsabilidades</h2>
+      <p>Nós nos comprometemos a entregar serviços conforme o acordado, respeitando prazos e normas técnicas da categoria.</p>
+    </div>
+  </section>
+</BaseLayout>

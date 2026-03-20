@@ -20,13 +20,17 @@ if (authError || !user) {
     return Astro.redirect('/login');
 }
 
-// Buscamos todas as integrações da Vercel
-const { data: vercelIntegrations, error: integrationsError } = await supabase
+// Buscamos todas as integrações
+const { data: integrations, error: integrationsError } = await supabase
     .from('integrations')
     .select('*')
     .eq('user_id', user.id)
-    .eq('provider', 'vercel')
     .order('created_at', { ascending: false });
+
+const vercelIntegrations = integrations?.filter((i: any) => i.provider === 'vercel') || [];
+const githubIntegrations = integrations?.filter((i: any) => i.provider === 'github') || [];
+const openaiIntegrations = integrations?.filter((i: any) => i.provider === 'openai') || [];
+const geminiIntegrations = integrations?.filter((i: any) => i.provider === 'gemini') || [];
 
 let successMessage = '';
 let errorMessage = '';
@@ -61,19 +65,66 @@ if (Astro.request.method === "POST") {
                 errorMessage = insertError.message;
             } else {
                 successMessage = 'Conta da Vercel conectada com sucesso!';
-                // Atualiza lista na hora
-                const { data: updatedIntegrations } = await supabase
-                    .from('integrations')
-                    .select('*')
-                    .eq('user_id', user.id)
-                    .eq('provider', 'vercel')
-                    .order('created_at', { ascending: false });
-                if (updatedIntegrations) {
-                    vercelIntegrations.length = 0;
-                    vercelIntegrations.push(...updatedIntegrations);
-                }
             }
         } 
+        else if (action === 'update_github') {
+            activeTab = 'integracoes';
+            const githubToken = data.get('github_token')?.toString().trim() || '';
+            const accountName = data.get('account_name')?.toString().trim() || 'GitHub';
+
+            const { error: insertError } = await supabase
+                .from('integrations')
+                .insert({
+                    user_id: user.id,
+                    provider: 'github',
+                    token: githubToken,
+                    account_name: accountName
+                });
+
+            if (insertError) {
+                errorMessage = insertError.message;
+            } else {
+                successMessage = 'Token do GitHub conectado com sucesso!';
+            }
+        }
+        else if (action === 'update_openai') {
+            activeTab = 'integracoes';
+            const openaiKey = data.get('openai_key')?.toString().trim() || '';
+
+            const { error: insertError } = await supabase
+                .from('integrations')
+                .insert({
+                    user_id: user.id,
+                    provider: 'openai',
+                    token: openaiKey,
+                    account_name: 'OpenAI API Key'
+                });
+
+            if (insertError) {
+                errorMessage = insertError.message;
+            } else {
+                successMessage = 'Chave da OpenAI salva com sucesso!';
+            }
+        }
+        else if (action === 'update_gemini') {
+            activeTab = 'integracoes';
+            const geminiKey = data.get('gemini_key')?.toString().trim() || '';
+
+            const { error: insertError } = await supabase
+                .from('integrations')
+                .insert({
+                    user_id: user.id,
+                    provider: 'gemini',
+                    token: geminiKey,
+                    account_name: 'Google Gemini Key'
+                });
+
+            if (insertError) {
+                errorMessage = insertError.message;
+            } else {
+                successMessage = 'Chave do Google Gemini salva com sucesso!';
+            }
+        }
         else if (action === 'delete_vercel') {
             activeTab = 'integrations';
             const integrationId = data.get('integration_id')?.toString() || '';
@@ -88,10 +139,6 @@ if (Astro.request.method === "POST") {
                 errorMessage = deleteError.message;
             } else {
                 successMessage = 'Integração removida com sucesso.';
-                const index = vercelIntegrations?.findIndex((i: any) => i.id === integrationId);
-                if (index !== undefined && index > -1) {
-                    vercelIntegrations?.splice(index, 1);
-                }
             }
         }
         else if (action === 'update_password') {
@@ -115,6 +162,25 @@ if (Astro.request.method === "POST") {
                 }
             }
         }
+        
+        // No checkout final, recarregamos as integrações para que a UI reflita a mudança
+        const { data: newIntegrations } = await supabase
+            .from('integrations')
+            .select('*')
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: false });
+        
+        if (newIntegrations) {
+            vercelIntegrations.length = 0;
+            vercelIntegrations.push(...newIntegrations.filter((i: any) => i.provider === 'vercel'));
+            githubIntegrations.length = 0;
+            githubIntegrations.push(...newIntegrations.filter((i: any) => i.provider === 'github'));
+            openaiIntegrations.length = 0;
+            openaiIntegrations.push(...newIntegrations.filter((i: any) => i.provider === 'openai'));
+            geminiIntegrations.length = 0;
+            geminiIntegrations.push(...newIntegrations.filter((i: any) => i.provider === 'gemini'));
+        }
+
     } catch (e: any) {
         errorMessage = e.message || 'Erro inesperado ao salvar';
     }
@@ -235,11 +301,11 @@ if (Astro.request.method === "POST") {
 
                 <!-- Lista de Integrações -> Vercel -->
                 <div class="mb-8">
-                    <h4 class="font-bold text-slate-800 mb-4">Contas Conectadas</h4>
+                    <h4 class="font-bold text-slate-800 mb-4 text-sm">Contas Conectadas</h4>
                     
-                    {(!vercelIntegrations || vercelIntegrations.length === 0) ? (
-                        <div class="p-6 border border-dashed border-slate-300 rounded-xl text-center bg-slate-50 text-slate-500">
-                            Nenhuma conta da Vercel conectada no momento. <br/>Adicione uma abaixo.
+                    {vercelIntegrations.length === 0 ? (
+                        <div class="p-6 border border-dashed border-slate-300 rounded-xl text-center bg-slate-50 text-slate-500 text-sm">
+                            Nenhuma conta da Vercel conectada.
                         </div>
                     ) : (
                         <div class="space-y-3">
@@ -250,14 +316,14 @@ if (Astro.request.method === "POST") {
                                             <svg class="h-5 w-5 fill-current" viewBox="0 0 512 512"><path d="M256 48l240 416H16z"/></svg>
                                         </div>
                                         <div>
-                                            <p class="font-bold text-slate-800">{integration.account_name || 'Conta Vercel'}</p>
-                                            <p class="text-xs text-slate-500 tracking-wider">Token: {integration.token.slice(0, 5)}••••••••</p>
+                                            <p class="font-bold text-slate-800 text-sm">{integration.account_name}</p>
+                                            <p class="text-xs text-slate-500 tracking-wider">Token: {integration.token.slice(0, 5)}••••</p>
                                         </div>
                                     </div>
-                                    <form method="POST" onsubmit="event.preventDefault(); window.cnxConfirm('Tem certeza que deseja remover esta conexão? A Visão Geral perderá acesso a estes sites.', () => this.submit());">
+                                    <form method="POST">
                                         <input type="hidden" name="action" value="delete_vercel" />
                                         <input type="hidden" name="integration_id" value={integration.id} />
-                                        <button type="submit" class="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors" title="Remover Conexão">
+                                        <button type="submit" class="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
                                         </button>
                                     </form>
@@ -267,48 +333,157 @@ if (Astro.request.method === "POST") {
                     )}
                 </div>
 
-                <form method="POST" class="bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                <form method="POST" class="bg-slate-50 p-6 rounded-2xl border border-slate-200 mb-12">
                     <input type="hidden" name="action" value="update_vercel" />
-                    
-                    <h4 class="font-bold text-slate-800 border-b border-slate-200 pb-2 mb-4">Adicionar Nova Conta da Vercel</h4>
-                    
-                    <div class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label for="account_name" class="block text-sm font-semibold text-slate-700 mb-1">
-                                Nome para Identificação
-                            </label>
-                            <input 
-                                type="text" 
-                                id="account_name" 
-                                name="account_name" 
-                                placeholder="Ex: Minha Conta Pessoal, Agência, etc."
-                                required
-                                class="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-colors"
-                            >
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Nome da Conta</label>
+                            <input type="text" name="account_name" required placeholder="Ex: Minha Vercel" class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-sm">
                         </div>
-
                         <div>
-                            <label for="vercel_token" class="block text-sm font-semibold text-slate-700 mb-1">
-                                Vercel Access Token Pessoal
-                            </label>
-                            <input 
-                                type="password" 
-                                id="vercel_token" 
-                                name="vercel_token" 
-                                placeholder="Ex: 5r7oXqA9zB2vV..."
-                                required
-                                class="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-colors font-mono"
-                            >
-                            <p class="mt-2 text-xs text-slate-500">
-                                Não sabe criar um token? <a href="https://vercel.com/account/tokens" target="_blank" rel="noopener noreferrer" class="text-violet-600 hover:text-violet-700 underline font-medium">Clique aqui</a> e crie um usando sua conta.
-                            </p>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Vercel Token</label>
+                            <input type="password" name="vercel_token" required placeholder="Token da Vercel" class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-sm font-mono">
                         </div>
                     </div>
+                    <div class="mt-4 text-right">
+                        <button type="submit" class="px-4 py-2 bg-slate-800 text-white text-sm font-bold rounded-lg hover:bg-black transition-colors">Conectar Vercel</button>
+                    </div>
+                </form>
 
-                    <div class="pt-6 relative text-right">
-                        <button type="submit" class="px-6 py-2.5 bg-slate-800 text-white font-bold rounded-xl hover:bg-black transition-colors shadow-lg">
-                            Conectar Nova Conta
-                        </button>
+                <!-- GITHUB -->
+                <div class="mt-12 mb-6 border-b border-slate-100 pb-4">
+                    <div class="flex items-center gap-3 mb-1">
+                        <span class="p-2 bg-slate-900 rounded-lg text-white">
+                            <svg class="h-5 w-5 fill-current" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.43.372.823 1.102.823 2.222 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                        </span>
+                        <h3 class="font-heading font-bold text-xl text-slate-800">Integração com o GitHub</h3>
+                    </div>
+                    <p class="text-sm text-slate-500 mt-2">Personal Access Token (PAT) para criar os repositórios PBN.</p>
+                </div>
+
+                <div class="mb-6">
+                    {githubIntegrations.length === 0 ? (
+                        <div class="p-4 border border-dashed border-slate-300 rounded-xl text-center bg-slate-50 text-slate-500 text-sm">Nenhuma conta conectada.</div>
+                    ) : (
+                        <div class="space-y-3">
+                            {githubIntegrations.map((i: any) => (
+                                <div class="flex items-center justify-between p-3 border border-slate-200 rounded-xl bg-white shadow-sm">
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-xl">🐙</span>
+                                        <div>
+                                            <p class="font-bold text-slate-800 text-sm">{i.account_name}</p>
+                                            <p class="text-xs text-slate-400">Token: {i.token.slice(0, 4)}••••</p>
+                                        </div>
+                                    </div>
+                                    <form method="POST">
+                                        <input type="hidden" name="action" value="delete_vercel" />
+                                        <input type="hidden" name="integration_id" value={i.id} />
+                                        <button type="submit" class="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg></button>
+                                    </form>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                <form method="POST" class="bg-slate-50 p-6 rounded-2xl border border-slate-200 mb-12">
+                    <input type="hidden" name="action" value="update_github" />
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Nome da Conta (GitHub)</label>
+                            <input type="text" name="account_name" required placeholder="Ex: Meu GitHub" class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Token PAT (ghp_...)</label>
+                            <input type="password" name="github_token" required placeholder="Token do GitHub" class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-sm font-mono">
+                        </div>
+                    </div>
+                    <div class="mt-4 text-right">
+                        <button type="submit" class="px-4 py-2 bg-slate-800 text-white text-sm font-bold rounded-lg hover:bg-black transition-colors">Conectar GitHub</button>
+                    </div>
+                </form>
+
+                <!-- OPENAI -->
+                <div class="mt-12 mb-6 border-b border-slate-100 pb-4">
+                    <div class="flex items-center gap-3 mb-1">
+                        <span class="p-2 bg-emerald-600 rounded-lg text-white">🤖</span>
+                        <h3 class="font-heading font-bold text-xl text-slate-800">IA Automática (OpenAI)</h3>
+                    </div>
+                    <p class="text-sm text-slate-500 mt-2">Chave da API usada para gerar o código e conteúdo.</p>
+                </div>
+
+                <div class="mb-6">
+                    {openaiIntegrations.length === 0 ? (
+                        <div class="p-4 border border-dashed border-slate-300 rounded-xl text-center bg-slate-50 text-slate-500 text-sm">Nenhuma chave cadastrada.</div>
+                    ) : (
+                        <div class="space-y-3">
+                            {openaiIntegrations.map((i: any) => (
+                                <div class="flex items-center justify-between p-3 border border-slate-200 rounded-xl bg-white shadow-sm">
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-xl text-emerald-600">✨</span>
+                                        <div><p class="font-bold text-slate-800 text-sm">OpenAI Key</p><p class="text-xs text-slate-400">Key: {i.token.slice(0, 5)}••••</p></div>
+                                    </div>
+                                    <form method="POST">
+                                        <input type="hidden" name="action" value="delete_vercel" />
+                                        <input type="hidden" name="integration_id" value={i.id} />
+                                        <button type="submit" class="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg></button>
+                                    </form>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                <form method="POST" class="bg-slate-50 p-6 rounded-2xl border border-slate-200 mb-12">
+                    <input type="hidden" name="action" value="update_openai" />
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">OpenAI API Key (sk-...)</label>
+                        <input type="password" name="openai_key" required placeholder="Sua chave secreta" class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-sm font-mono">
+                    </div>
+                    <div class="mt-4 text-right">
+                        <button type="submit" class="px-4 py-2 bg-slate-800 text-white text-sm font-bold rounded-lg hover:bg-black transition-colors">Salvar OpenAI</button>
+                    </div>
+                </form>
+
+                <!-- GEMINI -->
+                <div class="mt-12 mb-6 border-b border-slate-100 pb-4">
+                    <div class="flex items-center gap-3 mb-1">
+                        <span class="p-2 bg-blue-600 rounded-lg text-white">✨</span>
+                        <h3 class="font-heading font-bold text-xl text-slate-800">Google Gemini AI</h3>
+                    </div>
+                    <p class="text-sm text-slate-500 mt-2">Alternativa poderosa para geração de conteúdo e código.</p>
+                </div>
+
+                <div class="mb-6">
+                    {geminiIntegrations.length === 0 ? (
+                        <div class="p-4 border border-dashed border-slate-300 rounded-xl text-center bg-slate-50 text-slate-500 text-sm">Nenhuma chave do Gemini cadastrada.</div>
+                    ) : (
+                        <div class="space-y-3">
+                            {geminiIntegrations.map((i: any) => (
+                                <div class="flex items-center justify-between p-3 border border-slate-200 rounded-xl bg-white shadow-sm">
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-xl text-blue-600">💎</span>
+                                        <div><p class="font-bold text-slate-800 text-sm">Gemini Key</p><p class="text-xs text-slate-400">Key: {i.token.slice(0, 5)}••••</p></div>
+                                    </div>
+                                    <form method="POST">
+                                        <input type="hidden" name="action" value="delete_vercel" />
+                                        <input type="hidden" name="integration_id" value={i.id} />
+                                        <button type="submit" class="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg></button>
+                                    </form>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                <form method="POST" class="bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                    <input type="hidden" name="action" value="update_gemini" />
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Google Gemini API Key</label>
+                        <input type="password" name="gemini_key" required placeholder="Sua chave do Gemini" class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-sm font-mono">
+                    </div>
+                    <div class="mt-4 text-right">
+                        <button type="submit" class="px-4 py-2 bg-slate-800 text-white text-sm font-bold rounded-lg hover:bg-black transition-colors">Salvar Gemini Key</button>
                     </div>
                 </form>
             </div>

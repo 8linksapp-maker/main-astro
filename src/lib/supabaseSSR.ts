@@ -7,13 +7,23 @@ export function supabaseSSR(context: any) {
         {
             cookies: {
                 getAll() {
-                    const parsed = parseCookieHeader(context.request.headers.get('Cookie') ?? '')
-                    return parsed.map(c => ({ name: c.name, value: c.value || '' }))
+                    try {
+                        const cookieHeader = context?.request?.headers?.get('Cookie') ?? '';
+                        const parsed = parseCookieHeader(cookieHeader);
+                        return parsed.map(c => ({ name: c.name, value: c.value || '' }));
+                    } catch (_) {
+                        return [];
+                    }
                 },
                 setAll(cookiesToSet) {
-                    cookiesToSet.forEach(({ name, value, options }) =>
-                        context.cookies.set(name, value, options as any)
-                    )
+                    if (!context?.cookies?.set) return; // Se não houver objeto de cookies do Astro, ignora silenciosamente
+                    try {
+                        cookiesToSet.forEach(({ name, value, options }) =>
+                            context.cookies.set(name, value, options as any)
+                        );
+                    } catch (_) {
+                        // Ignora erros de gravação de cookie no servidor
+                    }
                 },
             },
         }

@@ -1,0 +1,61 @@
+---
+interface Stats {
+  value: string;
+  label: string;
+}
+
+interface Props {
+  title: string;
+  desc: string;
+  image: string;
+  badgeTitle?: string;
+  badgeSubtitle?: string;
+  btnText: string;
+  btnLink: string;
+  stats: Stats[];
+}
+
+const { title, desc, image, badgeTitle = 'Experiência', badgeSubtitle = 'Garantida', btnText, btnLink, stats } = Astro.props;
+---
+
+<section class="py-32 px-4 bg-white relative overflow-hidden">
+  <div class="max-w-7xl mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
+      <div class="order-2 md:order-1">
+        <div class="inline-block px-4 py-1 rounded-full bg-primary-100 text-primary-700 font-bold text-xs uppercase mb-6 tracking-widest">
+          Quem Somos
+        </div>
+        <h2 class="text-4xl md:text-6xl font-black text-slate-900 mb-8 tracking-tight leading-tight break-words">{title}</h2>
+        <p class="text-xl text-slate-600 leading-relaxed mb-10 font-medium">
+          {desc}
+        </p>
+        
+        <div class="grid grid-cols-2 gap-8 mb-12">
+          {stats?.map((stat) => (
+            <div>
+              <p class="text-4xl font-black text-primary-600 mb-1">{stat.value}</p>
+              <p class="text-slate-500 font-medium">{stat.label}</p>
+            </div>
+          ))}
+        </div>
+
+        <a href={btnLink} class="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-slate-900 text-white font-bold text-lg hover:bg-slate-800 transition-all group">
+          {btnText} <span class="group-hover:translate-x-2 transition-transform">→</span>
+        </a>
+      </div>
+
+      <div class="relative order-1 md:order-2 group">
+        <div class="absolute -inset-6 bg-slate-100 rounded-[3rem] rotate-3 group-hover:rotate-0 transition-transform duration-500"></div>
+        <img 
+          src={image} 
+          alt={title} 
+          class="relative rounded-[2.5rem] shadow-2xl w-full h-[600px] object-cover"
+        />
+        <div class="absolute -bottom-6 -left-6 bg-primary-600 text-white p-8 rounded-3xl shadow-xl hidden md:block">
+          <p class="text-2xl font-black leading-none">{badgeTitle}</p>
+          <p class="opacity-80 font-medium">{badgeSubtitle}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

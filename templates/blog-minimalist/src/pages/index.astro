@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section1Hero from '../components/sections/Section1Hero.astro';
+import Section2Benefits from '../components/sections/Section2Benefits.astro';
+import Section3Differentiators from '../components/sections/Section3Differentiators.astro';
+import Section4Categories from '../components/sections/Section4Categories.astro';
+import Section5About from '../components/sections/Section5About.astro';
+import Section6LatestPosts from '../components/sections/Section6LatestPosts.astro';
+
+import homeData from '../data/home.json';
+import siteConfig from '../data/siteConfig.json';
+---
+
+<BaseLayout 
+  title={homeData.seo?.title || siteConfig.name} 
+  description={homeData.seo?.description || siteConfig.description} 
+  image={homeData.seo?.image}
+  type="website"
+>
+  <Section1Hero {...homeData.hero} />
+  <Section2Benefits {...homeData.benefits} />
+  <Section3Differentiators {...homeData.differentiators} />
+  <Section4Categories {...homeData.categories} />
+  <Section5About {...homeData.about} />
+  <Section6LatestPosts {...homeData.latestPosts} />
+</BaseLayout>

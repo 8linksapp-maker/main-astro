@@ -1,0 +1,23 @@
+{
+    "name": "CNX Empresa Local",
+    "description": "Soluções completas e confiáveis para serviços locais em toda a região.",
+    "url": "https://cnxleste.com.br",
+    "theme": {
+        "primary": "#2563eb",
+        "primaryDark": "#1d4ed8",
+        "secondary": "#0f172a",
+        "accent": "#f59e0b",
+        "fontFamily": "Inter"
+    },
+    "contact": {
+        "name": "CNX Empresa Local",
+        "email": "contato@cnxleste.com.br",
+        "phone": "(11) 99999-9999",
+        "address": "Av. Paulista, 1000 - São Paulo, SP"
+    },
+    "businessHours": {
+        "weekdays": "Segunda a Sexta: 08:00 - 18:00",
+        "saturday": "Sábado: 09:00 - 13:00",
+        "sunday": "Domingo: Fechado"
+    }
+}

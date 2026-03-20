@@ -1,0 +1,35 @@
+---
+import CmsLayout from '../../../../../layouts/CmsLayout.astro';
+import { supabaseSSR } from '../../../../../lib/supabaseSSR';
+import PostsManager from '../../../../../components/admin/cms/PostsManager.tsx';
+
+const { id } = Astro.params;
+const supabase = supabaseSSR(Astro);
+const { data: { user } } = await supabase.auth.getUser();
+
+if (!user) {
+    return Astro.redirect('/login');
+}
+
+const { data: site, error: siteError } = await supabase
+    .from('sites_cms')
+    .select('*')
+    .eq('id', id)
+    .single();
+
+if (!site || siteError) {
+    return Astro.redirect('/dashboard/cms');
+}
+---
+
+<CmsLayout title={`Gerenciador de Artigos | CMS CNX`} siteId={id as string} siteName={site.company_name} repoName={site.repo_name}>
+    <div class="mb-10">
+        <h2 class="text-3xl font-black text-slate-900 mb-3 tracking-tight">O Diário (Posts)</h2>
+        <p class="text-slate-500 font-medium text-lg leading-relaxed max-w-2xl">
+            Acompanhe o acerto de artigos, notícias e guias em Markdowns que abastecem o coração o seu Blog. Selecione um arquivo para editá-lo ou redija algo novo.
+        </p>
+    </div>
+
+    <!-- Manager Interativo em React (Listagem Cloud) -->
+    <PostsManager client:load siteId={id as string} repoName={site.repo_name} />
+</CmsLayout>

@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section3About from '../components/sections/Section3About.astro';
+import home from '../data/home.json';
+---
+
+<BaseLayout title="Sobre Nós" description="Saiba mais sobre nossa história e valores.">
+  <div class="pt-20">
+    <Section3About {...home.about} />
+  </div>
+  <section class="py-24 px-4 bg-white">
+    <div class="max-w-4xl mx-auto prose prose-lg prose-slate prose-primary">
+      <h2 class="text-4xl font-black text-slate-900 mb-8 tracking-tight">Nossa Missão</h2>
+      <p>Proporcionar as melhores soluções locais com transparência, eficiência e foco total no cliente.</p>
+      
+      <h2 class="text-4xl font-black text-slate-900 mb-8 tracking-tight">Nossa Visão</h2>
+      <p>Ser a empresa referência em qualidade e inovação na nossa área de atuação, transformando a vida de nossos clientes.</p>
+    </div>
+  </section>
+</BaseLayout>

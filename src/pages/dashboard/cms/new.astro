@@ -1,0 +1,34 @@
+---
+import DashboardLayout from '../../../layouts/DashboardLayout.astro';
+import SiteBuilderWizard from '../../../components/admin/SiteBuilderWizard';
+import { supabaseSSR } from '../../../lib/supabaseSSR';
+
+const supabase = supabaseSSR(Astro);
+const { data: { user } } = await supabase.auth.getUser();
+
+if (!user) {
+    return Astro.redirect('/login');
+}
+---
+
+<DashboardLayout title="Criar Novo Site IA | CNX">
+    <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-6">
+        <div>
+            <h2 class="text-3xl font-bold text-slate-900 mb-2 flex items-center gap-3">
+                <span class="text-3xl">🪄</span> Gerador Astro (IA)
+            </h2>
+            <p class="text-slate-600">Configure os detalhes do seu novo site e a IA cuidará do resto.</p>
+        </div>
+        <a href="/dashboard/cms" class="px-4 py-2 bg-white text-slate-700 font-semibold rounded-lg hover:bg-slate-50 transition-colors shadow-sm border border-slate-300 flex items-center gap-2 w-max">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+            </svg>
+            Voltar para Projetos
+        </a>
+    </div>
+
+    <!-- Container do Wizard -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8">
+        <SiteBuilderWizard client:load />
+    </div>
+</DashboardLayout>

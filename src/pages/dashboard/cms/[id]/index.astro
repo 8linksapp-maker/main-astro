@@ -1,0 +1,112 @@
+---
+import CmsLayout from '../../../../layouts/CmsLayout.astro';
+import CmsDashboard from '../../../../components/admin/cms/CmsDashboard.tsx';
+import { supabaseSSR } from '../../../../lib/supabaseSSR';
+import { LayoutTemplate, Settings, Users, FileText, ExternalLink, ShieldCheck } from 'lucide-react';
+
+const { id } = Astro.params;
+const supabase = supabaseSSR(Astro);
+const { data: { user } } = await supabase.auth.getUser();
+
+if (!user) {
+    return Astro.redirect('/login');
+}
+
+const { data: site, error: siteError } = await supabase
+    .from('sites_cms')
+    .select('*')
+    .eq('id', id)
+    .single();
+
+if (!site || siteError) {
+    return Astro.redirect('/dashboard/cms');
+}
+---
+
+<CmsLayout title={`Painel: ${site.company_name} | CMS`} siteId={id} siteName={site.company_name} repoName={site.repo_name}>
+    
+    <!-- Cabeçalho (Simplificado pois a sidebar já faz o trabalho duro) -->
+    <div class="mb-12 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 bg-white p-8 rounded-3xl border border-slate-200 shadow-sm relative overflow-hidden">
+        <div class="absolute -right-10 -top-10 w-40 h-40 bg-violet-50 rounded-full blur-3xl"></div>
+        <div class="relative z-10 w-full flex justify-between items-center">
+            <div>
+                <h2 class="text-2xl font-black text-slate-900 mb-2">
+                    Bem-vindo ao Painel, <span class="text-violet-600">{site.company_name}</span> 👋
+                </h2>
+                <p class="text-slate-500 font-medium">Você está no painel central da sua publicação digital.</p>
+            </div>
+            <a href={site.url} target="_blank" class="px-5 py-2.5 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-colors shadow-lg shadow-slate-900/20 flex items-center gap-2">
+                Abrir Site Live <ExternalLink class="w-4 h-4" />
+            </a>
+        </div>
+    </div>
+
+    <!-- Estatísticas Vivas (React Component) -->
+    <CmsDashboard client:load siteId={id as string} repoName={site.repo_name} />
+
+    <!-- Grid de Módulos Rápidos -->
+    <h3 class="text-xl font-bold text-slate-800 mb-6 px-1">Atalhos Rápidos</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- Módulo: Configurações Globais -->
+        <a href={`/dashboard/cms/${id}/config`} class="group bg-white rounded-3xl border border-slate-200 p-8 flex flex-col items-start hover:border-violet-500 hover:shadow-2xl hover:shadow-violet-500/20 transition-all duration-300 hover:-translate-y-1 overflow-hidden relative">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-violet-100 to-transparent rounded-bl-full opacity-50 group-hover:scale-110 transition-transform duration-500"></div>
+            <div class="w-16 h-16 rounded-2xl bg-white border border-slate-100 text-slate-600 flex items-center justify-center mb-8 group-hover:bg-violet-600 group-hover:text-white group-hover:border-violet-600 transition-all duration-300 shadow-sm relative z-10">
+                <Settings className="w-8 h-8" />
+            </div>
+            <h4 class="text-xl font-bold text-slate-900 mb-3 group-hover:text-violet-600 transition-colors relative z-10">Configurações Base</h4>
+            <p class="text-sm text-slate-500 leading-relaxed relative z-10 font-medium">
+                Altere nome do site, paleta de cores globais, fontes, e-mails de contato e redes sociais do rodapé.
+            </p>
+        </a>
+
+        <!-- Módulo: Páginas Estáticas -->
+        <a href={`/dashboard/cms/${id}/pages`} class="group bg-white rounded-3xl border border-slate-200 p-8 flex flex-col items-start hover:border-emerald-500 hover:shadow-2xl hover:shadow-emerald-500/20 transition-all duration-300 hover:-translate-y-1 overflow-hidden relative">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-100 to-transparent rounded-bl-full opacity-50 group-hover:scale-110 transition-transform duration-500"></div>
+            <div class="w-16 h-16 rounded-2xl bg-white border border-slate-100 text-slate-600 flex items-center justify-center mb-8 group-hover:bg-emerald-500 group-hover:text-white group-hover:border-emerald-500 transition-all duration-300 shadow-sm relative z-10">
+                <LayoutTemplate className="w-8 h-8" />
+            </div>
+            <h4 class="text-xl font-bold text-slate-900 mb-3 group-hover:text-emerald-600 transition-colors relative z-10">Páginas Estruturais</h4>
+            <p class="text-sm text-slate-500 leading-relaxed relative z-10 font-medium">
+                Edite os textos do Hero, slogões, missões e blocos estáticos das páginas Home e Sobre Nós.
+            </p>
+        </a>
+
+        <!-- Módulo: Posts (Blog) -->
+        <a href={`/dashboard/cms/${id}/posts`} class="group bg-white rounded-3xl border border-slate-200 p-8 flex flex-col items-start hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/20 transition-all duration-300 hover:-translate-y-1 overflow-hidden relative">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-100 to-transparent rounded-bl-full opacity-50 group-hover:scale-110 transition-transform duration-500"></div>
+            <div class="w-16 h-16 rounded-2xl bg-white border border-slate-100 text-slate-600 flex items-center justify-center mb-8 group-hover:bg-blue-500 group-hover:text-white group-hover:border-blue-500 transition-all duration-300 shadow-sm relative z-10">
+                <FileText className="w-8 h-8" />
+            </div>
+            <h4 class="text-xl font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors relative z-10">Artigos do Blog</h4>
+            <p class="text-sm text-slate-500 leading-relaxed relative z-10 font-medium">
+                Gerenciador da redação. Escreva, edite ou exclua postagens. Altere status e defina categorias e datas.
+            </p>
+        </a>
+
+        <!-- Módulo: Categorias -->
+        <a href={`/dashboard/cms/${id}/categories`} class="group bg-white rounded-3xl border border-slate-200 p-8 flex flex-col items-start hover:border-indigo-500 hover:shadow-2xl hover:shadow-indigo-500/20 transition-all duration-300 hover:-translate-y-1 overflow-hidden relative">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-100 to-transparent rounded-bl-full opacity-50 group-hover:scale-110 transition-transform duration-500"></div>
+            <div class="w-16 h-16 rounded-2xl bg-white border border-slate-100 text-slate-600 flex items-center justify-center mb-8 group-hover:bg-indigo-500 group-hover:text-white group-hover:border-indigo-500 transition-all duration-300 shadow-sm relative z-10">
+                <span class="text-3xl">🏷️</span>
+            </div>
+            <h4 class="text-xl font-bold text-slate-900 mb-3 group-hover:text-indigo-600 transition-colors relative z-10">Categorias</h4>
+            <p class="text-sm text-slate-500 leading-relaxed relative z-10 font-medium">
+                Gerencie as taxonomia do seu blog. Crie, renomeie ou remova categorias que serão usadas nos seus artigos.
+            </p>
+        </a>
+
+        <!-- Módulo: Autores -->
+        <a href={`/dashboard/cms/${id}/authors`} class="group bg-white rounded-3xl border border-slate-200 p-8 flex flex-col items-start hover:border-amber-500 hover:shadow-2xl hover:shadow-amber-500/20 transition-all duration-300 hover:-translate-y-1 overflow-hidden relative">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-amber-100 to-transparent rounded-bl-full opacity-50 group-hover:scale-110 transition-transform duration-500"></div>
+            <div class="w-16 h-16 rounded-2xl bg-white border border-slate-100 text-slate-600 flex items-center justify-center mb-8 group-hover:bg-amber-500 group-hover:text-white group-hover:border-amber-500 transition-all duration-300 shadow-sm relative z-10">
+                <Users className="w-8 h-8" />
+            </div>
+            <h4 class="text-xl font-bold text-slate-900 mb-3 group-hover:text-amber-600 transition-colors relative z-10">Equipe Editora</h4>
+            <p class="text-sm text-slate-500 leading-relaxed relative z-10 font-medium">
+                Gerencie os perfis assinantes do blog. Altere nomenclaturas, biografias rápidas e links de foto.
+            </p>
+        </a>
+
+    </div>
+</CmsLayout>
