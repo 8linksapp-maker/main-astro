@@ -11,9 +11,10 @@ export default function Step2TemplateSelection({ data, onChange }: Props) {
     const isBlog = data.structure.siteType === 'blog';
 
     const templates = isBlog ? [
-        { id: 'minimalist', name: 'Blog Minimalista', description: 'Focado em leitura e AdSense', image: '/templates_previews/minimalist.png' }
+        { id: 'blog-minimalist', name: 'Blog Minimalista', description: 'Design clean e focado em leitura', image: '/templates_previews/minimalist.png', badge: null },
+        { id: 'blog-modern', name: 'Blog Moderno', description: 'Ultra-moderno com dark mode e glassmorphism', image: '/templates_previews/modern.png', badge: 'Novo' }
     ] : [
-        { id: 'local', name: 'Site Local Premium', description: 'Alta conversão para serviços', image: '/templates_previews/local.png' }
+        { id: 'local', name: 'Site Local Premium', description: 'Alta conversão para serviços', image: '/templates_previews/local.png', badge: null }
     ];
 
     return (
@@ -36,6 +37,9 @@ export default function Step2TemplateSelection({ data, onChange }: Props) {
                         className={`group cursor-pointer relative overflow-hidden rounded-2xl border-2 transition-all hover:shadow-xl ${data.templateId === tpl.id ? 'border-violet-600 ring-4 ring-violet-50' : 'border-slate-200 hover:border-slate-300'
                             }`}
                     >
+                        {tpl.badge && (
+                            <div className="absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full bg-violet-600 text-white text-xs font-bold shadow">{tpl.badge}</div>
+                        )}
                         <div className="aspect-video w-full overflow-hidden bg-slate-100">
                             <img src={tpl.image} alt={tpl.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                         </div>

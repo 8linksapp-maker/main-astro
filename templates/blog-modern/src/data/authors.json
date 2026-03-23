@@ -1,0 +1,9 @@
+[
+    {
+        "id": "author-default",
+        "name": "Equipe Editorial",
+        "role": "Redação",
+        "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Redacao",
+        "bio": "Equipe oficial produtora de conteúdos para o blog."
+    }
+]

@@ -1,0 +1,66 @@
+---
+interface Stats {
+  value: string;
+  label: string;
+}
+
+interface Props {
+  title: string;
+  desc: string;
+  image: string;
+  badgeTitle?: string;
+  badgeSubtitle?: string;
+  btnText: string;
+  btnLink: string;
+  stats: Stats[];
+}
+
+const { title, desc, image, badgeTitle = 'Experiência', badgeSubtitle = 'Garantida', btnText, btnLink, stats } = Astro.props;
+---
+
+<section id="about" class="py-32 px-4 bg-[#060606] relative overflow-hidden border-t border-white/[0.02]">
+  <!-- Imagem de fundo com overlay -->
+  <div class="absolute inset-0 z-0">
+    <img src={image} alt={title} class="w-full h-full object-cover opacity-[0.07] filter grayscale-[60%]" />
+    <div class="absolute inset-0 bg-gradient-to-b from-[#060606] via-transparent to-[#060606]"></div>
+  </div>
+  <!-- Glow central -->
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary-600/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+  <div class="max-w-5xl mx-auto relative z-10 text-center">
+
+    <!-- Badge -->
+    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.06] border border-white/15 text-white font-semibold text-xs uppercase mb-8 tracking-widest backdrop-blur-sm">
+      <span class="w-2 h-2 rounded-full bg-primary-500 animate-pulse"></span>
+      Quem Somos
+    </div>
+
+    <!-- Título -->
+    <h2 class="text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-400 mb-8 tracking-tight leading-[1.1]">{title}</h2>
+
+    <!-- Desc -->
+    <p class="text-lg md:text-xl text-slate-400 leading-relaxed mb-16 font-light max-w-3xl mx-auto">
+      {desc}
+    </p>
+
+    <!-- Stats em linha horizontal -->
+    {stats && stats.length > 0 && (
+      <div class="flex flex-wrap items-center justify-center gap-0 mb-16 divide-x divide-white/[0.06]">
+        {stats.map((stat) => (
+          <div class="px-12 py-6 text-center">
+            <p class="text-5xl font-black text-white mb-2 bg-clip-text text-transparent bg-gradient-to-b from-white to-slate-400">{stat.value}</p>
+            <p class="text-slate-500 font-medium text-xs uppercase tracking-wider">{stat.label}</p>
+          </div>
+        ))}
+      </div>
+    )}
+
+    <!-- Linha separadora decorativa -->
+    <div class="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mb-12"></div>
+
+    <!-- CTA -->
+    <a href={btnLink} class="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-white text-slate-900 font-bold text-sm hover:scale-105 transition-all shadow-[0_0_30px_-10px_rgba(255,255,255,0.2)] hover:shadow-[0_0_50px_-15px_rgba(255,255,255,0.4)] group">
+      {btnText} <span class="group-hover:translate-x-1 transition-transform">→</span>
+    </a>
+  </div>
+</section>

@@ -242,7 +242,8 @@ Estrutura JSON esperada:
 export const POST: APIRoute = async (context) => {
     try {
         const body = await context.request.json();
-        const { companyName, mainKeyword, services, design, seo } = body;
+        const { companyName, mainKeyword, services, design, seo, template } = body;
+        const selectedTemplate = ['blog-minimalist', 'blog-modern'].includes(template) ? template : 'blog-minimalist';
 
         if (!companyName) return new Response(JSON.stringify({ error: 'Nome do blog é obrigatório.' }), { status: 400 });
 
@@ -272,7 +273,7 @@ export const POST: APIRoute = async (context) => {
             .filter(Boolean);
 
         // Prepara os arquivos base (vamos ler o template)
-        const templateDir = path.join(process.cwd(), 'templates', 'blog-minimalist');
+        const templateDir = path.join(process.cwd(), 'templates', selectedTemplate);
         const templateFiles = getTemplateFiles(templateDir, templateDir);
 
         const originalConfig = templateFiles.find(f => f.path === 'src/data/siteConfig.json');

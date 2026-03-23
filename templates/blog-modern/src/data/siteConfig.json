@@ -1,0 +1,27 @@
+{
+    "name": "CNX Premium Blog",
+    "description": "O melhor conteúdo sobre tecnologia, marketing e produtividade em um só lugar.",
+    "url": "https://meu-blog-premium.com",
+    "author": "CNX Agency",
+    "language": "pt-BR",
+    "theme": {
+        "primary": "#0ea5e9",
+        "primaryDark": "#0369a1",
+        "accent": "#f59e0b"
+    },
+    "social": {
+        "instagram": "https://instagram.com/cnxa",
+        "twitter": "https://twitter.com/cnxa",
+        "linkedin": "https://linkedin.com/in/cnxa"
+    },
+    "contact": {
+        "email": "contato@cnx.app",
+        "phone": "+55 11 98888-8888",
+        "address": "Av. Paulista, 1000 - São Paulo, SP",
+        "name": "CNX Soluções Digitais"
+    },
+    "legal": {
+        "terms_last_updated": "18 de Março de 2026",
+        "privacy_last_updated": "18 de Março de 2026"
+    }
+}

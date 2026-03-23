@@ -125,7 +125,7 @@ export default function SiteBuilderWizard() {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         ...data.structure,
-                        templateId: data.templateId,
+                        template: data.templateId,
                         design: data.design,
                         seo: data.seo
                     })

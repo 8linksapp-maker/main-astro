@@ -1,0 +1,90 @@
+{
+    "hero": {
+        "title": "Crie Experiências Digitais que Impactam",
+        "subtitle": "Descubra estratégias, dicas e conteúdos exclusivos para elevar o nível do seu negócio e sua produtividade.",
+        "btnText": "Explorar Artigos",
+        "btnLink": "/blog",
+        "bgImage": "https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=2070&auto=format&fit=crop"
+    },
+    "benefits": {
+        "title": "Por que assinar nosso conteúdo?",
+        "items": [
+            {
+                "icon": "CheckCircle2",
+                "title": "Conteúdo Exclusivo",
+                "desc": "Acesso a guias técnicos e estratégicos que você não encontra em nenhum outro lugar."
+            },
+            {
+                "icon": "Zap",
+                "title": "Rapidez e Prática",
+                "desc": "Dicas práticas para aplicar hoje mesmo e começar a ver resultados imediatos."
+            },
+            {
+                "icon": "ShieldCheck",
+                "title": "Métodos Validados",
+                "desc": "Todo conteúdo é validado por especialistas antes de ser publicado para sua segurança."
+            }
+        ]
+    },
+    "differentiators": {
+        "title": "O que nos faz diferentes",
+        "image": "https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=2070&auto=format&fit=crop",
+        "items": [
+            {
+                "title": "Curadoria Especializada",
+                "desc": "Nenhum post entra sem passar por uma revisão técnica rigorosa de especialistas."
+            },
+            {
+                "title": "Foco em Resultados",
+                "desc": "Nosso conteúdo é direcionado para métricas reais e crescimento sustentável."
+            },
+            {
+                "title": "Comunidade VIP",
+                "desc": "Faça parte de uma rede exclusiva de leitores engajados e influentes."
+            }
+        ]
+    },
+    "categories": {
+        "title": "Explore por Categorias",
+        "items": [
+            {
+                "title": "Estratégia",
+                "desc": "Planejamento avançado e visão de longo prazo para seu crescimento.",
+                "link": "/blog/estrategia"
+            },
+            {
+                "title": "Marketing",
+                "desc": "As melhores táticas de aquisição, retenção e branding atualizadas.",
+                "link": "/blog/marketing"
+            },
+            {
+                "title": "Produtividade",
+                "desc": "Aprenda a otimizar seu tempo e processos com ferramentas modernas.",
+                "link": "/blog/produtividade"
+            }
+        ]
+    },
+    "about": {
+        "title": "Conheça nossa Jornada",
+        "desc": "Nascemos com a missão de democratizar o acesso à informação de alto nível. Nossa equipe é composta por profissionais dedicados a transformar conhecimento em ação.",
+        "image": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop",
+        "btnText": "Saiba Mais Sobre Nós",
+        "btnLink": "/sobre",
+        "stats": [
+            {
+                "value": "12k+",
+                "label": "Leitores/Mês"
+            },
+            {
+                "value": "600+",
+                "label": "Artigos"
+            }
+        ]
+    },
+    "latestPosts": {
+        "title": "Publicações Recentes",
+        "limit": 3,
+        "btnText": "Ver Tudo",
+        "btnLink": "/blog"
+    }
+}

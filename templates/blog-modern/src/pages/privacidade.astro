@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import siteConfig from '../data/siteConfig.json';
+import privacyData from '../data/privacy.json';
+---
+
+<BaseLayout title={privacyData.title} description={`Leia nossa ${privacyData.title.toLowerCase()} e proteção de dados.`}>
+  <div class="bg-[#050505] min-h-screen">
+
+    <!-- Header editorial -->
+    <header class="pt-40 pb-16 px-4 border-b border-white/[0.04] relative overflow-hidden">
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-primary-600/8 rounded-full blur-[120px] pointer-events-none"></div>
+      <div class="max-w-7xl mx-auto relative z-10">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.03] border border-white/10 text-slate-400 text-xs font-semibold uppercase tracking-wider mb-8 backdrop-blur-sm">
+          Legal
+        </div>
+        <h1 class="text-5xl md:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-white to-slate-500 tracking-tighter leading-[0.95] mb-6">{privacyData.title}</h1>
+        <p class="text-slate-600 text-sm">Última atualização: {privacyData.lastUpdated || siteConfig.legal.privacy_last_updated}</p>
+      </div>
+    </header>
+
+    <!-- Conteúdo: coluna de leitura + sidebar (igual ao artigo) -->
+    <div class="max-w-7xl mx-auto px-4 md:px-8 py-20">
+      <div class="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-12 xl:gap-20 pb-16">
+
+        <!-- Coluna principal -->
+        <main class="prose prose-lg prose-invert max-w-none
+          prose-headings:text-slate-100 prose-headings:font-bold prose-headings:tracking-tight prose-headings:mt-12 prose-headings:mb-4
+          prose-p:text-slate-400 prose-p:leading-relaxed prose-p:font-light
+          prose-a:text-primary-400 prose-a:no-underline hover:prose-a:underline
+          prose-strong:text-slate-200
+        ">
+          {privacyData.content.map((section) => (
+            <div>
+              <h2>{section.title}</h2>
+              <p>{section.text}</p>
+            </div>
+          ))}
+        </main>
+
+        <!-- Sidebar -->
+        <aside class="hidden lg:block">
+          <div class="sticky top-32 space-y-4">
+            <div class="bg-[#111111] rounded-2xl p-6 border border-white/[0.05]">
+              <p class="text-[10px] font-bold uppercase tracking-widest text-slate-600 mb-4">Seções</p>
+              <nav class="space-y-2">
+                {privacyData.content.map((section) => (
+                  <p class="text-slate-500 text-xs leading-relaxed py-1.5 border-b border-white/[0.04] last:border-0">{section.title}</p>
+                ))}
+              </nav>
+            </div>
+            <div class="bg-[#111111] rounded-2xl p-5 border border-white/[0.05]">
+              <p class="text-[10px] font-bold uppercase tracking-widest text-slate-600 mb-3">Dúvidas?</p>
+              <a href="/contato" class="text-primary-400 text-sm hover:underline">{siteConfig.contact.email}</a>
+            </div>
+            <a href="/blog" class="w-full flex items-center justify-center gap-2 py-3 px-6 rounded-xl bg-white/[0.02] border border-white/[0.05] text-slate-400 text-sm font-semibold hover:bg-white/[0.05] hover:text-white transition-all group">
+              <svg class="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+              Ver artigos
+            </a>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

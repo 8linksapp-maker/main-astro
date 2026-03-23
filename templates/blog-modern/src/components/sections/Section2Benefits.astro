@@ -1,0 +1,65 @@
+---
+import * as LucideIcons from 'lucide-react';
+
+interface Benefit {
+  icon: string;
+  title: string;
+  desc: string;
+}
+
+interface Props {
+  title: string;
+  items: Benefit[];
+}
+
+const { title, items } = Astro.props;
+
+---
+
+<section class="py-32 px-4 bg-[#0A0A0A] relative border-t border-white/[0.02]">
+  <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+  
+  <div class="max-w-7xl mx-auto relative z-10">
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-16 lg:gap-24">
+      
+      <!-- Coluna esquerda: título sticky -->
+      <div class="lg:col-span-2">
+        <div class="lg:sticky lg:top-32">
+          <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.06] border border-white/15 text-white text-xs font-semibold uppercase tracking-wider mb-6 backdrop-blur-sm">
+            <span class="w-1.5 h-1.5 rounded-full bg-primary-500"></span>
+            Benefícios
+          </span>
+          <h2 class="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-400 tracking-tight leading-[1.2] mb-6">{title}</h2>
+          <p class="text-slate-500 font-light leading-relaxed">Descubra o que torna nossa abordagem diferente e por que vale a pena acompanhar.</p>
+
+          <!-- Decoração: linha vertical -->
+          <div class="mt-12 w-px h-24 bg-gradient-to-b from-primary-500/40 to-transparent hidden lg:block"></div>
+        </div>
+      </div>
+
+      <!-- Coluna direita: cards em lista vertical -->
+      <div class="lg:col-span-3 space-y-4">
+        {items.map((item, index) => {
+          const Icon = (LucideIcons as any)[item.icon] || LucideIcons.CheckCircle2;
+          return (
+            <div class="group flex gap-6 p-7 rounded-2xl bg-white/[0.02] border border-white/[0.04] hover:bg-white/[0.04] hover:border-white/10 transition-all duration-300">
+              <!-- Ícone -->
+              <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-white/[0.03] border border-white/[0.05] text-slate-400 flex items-center justify-center group-hover:text-primary-400 group-hover:border-primary-500/20 group-hover:scale-110 transition-all duration-400">
+                <Icon size={22} strokeWidth={1.5} />
+              </div>
+              <!-- Texto -->
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between mb-2">
+                  <h3 class="text-base font-semibold text-slate-200 group-hover:text-white transition-colors">{item.title}</h3>
+              <span class="text-xs text-slate-400 font-mono ml-4 shrink-0">{String(index + 1).padStart(2, '0')}</span>
+                </div>
+                <p class="text-slate-500 text-sm leading-relaxed font-light">{item.desc}</p>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+
+    </div>
+  </div>
+</section>

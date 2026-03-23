@@ -1,0 +1,111 @@
+---
+import { getCollection } from 'astro:content';
+
+interface Props {
+  title: string;
+  limit: number;
+  btnText: string;
+  btnLink: string;
+}
+
+const { title, limit, btnText, btnLink } = Astro.props;
+
+// Puxar os posts reais da coleção
+const allPosts = await getCollection('blog');
+const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const recentPosts = sortedPosts.slice(0, limit);
+---
+
+<section class="py-32 px-4 bg-[#0A0A0A] relative overflow-hidden border-t border-white/[0.02]" id="posts">
+  <div class="absolute top-0 right-0 w-[800px] h-[800px] bg-accent-500/5 rounded-full blur-[150px] pointer-events-none"></div>
+
+  <div class="max-w-7xl mx-auto relative z-10">
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/15 text-white font-semibold text-xs uppercase mb-6 tracking-widest backdrop-blur-sm">
+          <span class="w-2 h-2 rounded-full bg-accent-500 animate-pulse"></span>
+          Novidades
+        </div>
+        <h2 class="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400 tracking-tight leading-tight">{title}</h2>
+      </div>
+      <a href={btnLink} class="px-8 py-3.5 rounded-full bg-white/[0.03] border border-white/10 text-slate-200 font-semibold flex items-center gap-3 hover:bg-white/[0.08] hover:text-white transition-all group shrink-0">
+        {btnText}
+        <svg class="w-4 h-4 text-accent-400 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+      </a>
+    </div>
+
+    {recentPosts.length > 0 && (() => {
+      const [featured, ...rest] = recentPosts;
+      return (
+        <>
+          {/* Post destaque — layout horizontal full-width */}
+          <article class="group mb-8 relative bg-[#111111] rounded-3xl overflow-hidden border border-white/[0.05] hover:border-white/10 transition-all duration-500 shadow-2xl shadow-black/50">
+            <div class="grid grid-cols-1 lg:grid-cols-2">
+              {/* Imagem */}
+              <a href={`/blog/${featured.slug}`} class="block relative overflow-hidden bg-[#1A1A1A] lg:h-[420px]">
+                <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-10 duration-500"></div>
+                <div class="absolute inset-0 bg-gradient-to-r from-transparent to-[#111111] z-20 hidden lg:block"></div>
+                <img
+                  src={featured.data.heroImage || 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f'}
+                  alt={featured.data.title}
+                  class="w-full h-full object-cover aspect-[16/9] lg:aspect-auto filter grayscale-[30%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+                />
+              </a>
+
+              {/* Conteúdo */}
+              <div class="p-10 lg:p-12 flex flex-col justify-center relative">
+                <div class="flex items-center gap-4 mb-6">
+                  <span class="px-3 py-1 rounded-md bg-white/[0.08] border border-white/15 text-white font-bold text-[10px] uppercase tracking-widest">
+                    {featured.data.category || 'Destaque'}
+                  </span>
+                  <span class="text-slate-500 text-xs uppercase tracking-wider">
+                    {featured.data.pubDate ? new Date(featured.data.pubDate).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' }) : ''}
+                  </span>
+                </div>
+                <h3 class="text-2xl lg:text-3xl font-bold text-slate-100 mb-4 group-hover:text-white transition-colors leading-snug">
+                  <a href={`/blog/${featured.slug}`}>{featured.data.title}</a>
+                </h3>
+                <p class="text-slate-500 leading-relaxed font-light mb-8 line-clamp-3">{featured.data.description}</p>
+                <div class="mt-auto">
+                  <a href={`/blog/${featured.slug}`} class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/[0.05] border border-white/10 text-slate-200 text-sm font-semibold hover:bg-white/[0.1] hover:text-white transition-all group/btn">
+                    Ler artigo completo
+                    <svg class="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          {/* Demais posts — lista horizontal compacta */}
+          {rest.length > 0 && (
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {rest.map((post) => (
+                <article class="group flex gap-5 p-5 rounded-2xl bg-white/[0.02] border border-white/[0.04] hover:bg-white/[0.04] hover:border-white/10 transition-all duration-300">
+                  {/* Thumbnail pequena */}
+                  <a href={`/blog/${post.slug}`} class="flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden bg-[#1A1A1A] relative">
+                    <img
+                      src={post.data.heroImage || 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f'}
+                      alt={post.data.title}
+                      class="w-full h-full object-cover filter grayscale-[40%] group-hover:grayscale-0 transition-all duration-500"
+                    />
+                  </a>
+                  {/* Texto */}
+                  <div class="flex-1 min-w-0 flex flex-col justify-center">
+                    <span class="text-white text-[10px] font-bold uppercase tracking-widest mb-1">{post.data.category || 'Geral'}</span>
+                    <h4 class="text-sm font-semibold text-slate-300 group-hover:text-white transition-colors line-clamp-2 leading-snug">
+                      <a href={`/blog/${post.slug}`}>{post.data.title}</a>
+                    </h4>
+                    <span class="text-slate-600 text-xs mt-1.5 uppercase tracking-wide">
+                      {post.data.pubDate ? new Date(post.data.pubDate).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' }) : ''}
+                    </span>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+        </>
+      );
+    })()}
+  </div>
+</section>

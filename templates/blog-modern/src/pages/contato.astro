@@ -1,0 +1,105 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import siteConfig from '../data/siteConfig.json';
+import contatoData from '../data/contato.json';
+---
+
+<BaseLayout 
+  title={contatoData.seo?.title || "Contato"} 
+  description={contatoData.seo?.description}
+  image={contatoData.seo?.image}
+>
+  <div class="bg-[#050505] min-h-screen">
+
+    <!-- Header -->
+    <header class="pt-40 pb-20 px-4 border-b border-white/[0.04] relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-primary-600/10 rounded-full blur-[150px] pointer-events-none"></div>
+      <div class="max-w-7xl mx-auto relative z-10">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.06] border border-white/15 text-white text-xs font-semibold uppercase tracking-wider mb-8 backdrop-blur-sm">
+          <span class="w-1.5 h-1.5 rounded-full bg-primary-500 animate-pulse"></span>
+          Contato
+        </div>
+        <h1 class="text-5xl md:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-white to-slate-500 tracking-tighter leading-[0.95] mb-6">{contatoData.hero.title}</h1>
+        <p class="text-slate-500 font-light text-lg max-w-lg">{contatoData.hero.subtitle}</p>
+      </div>
+    </header>
+
+    <!-- Conteúdo: info à esquerda + form à direita (estrutura invertida do minimalist) -->
+    <div class="max-w-7xl mx-auto px-4 py-20">
+      <div class="grid grid-cols-1 lg:grid-cols-[1fr_1.4fr] gap-12 xl:gap-20">
+
+        <!-- Info de contato: lista moderna sem fundo branco -->
+        <div class="space-y-8">
+          <div>
+            <p class="text-[10px] font-bold uppercase tracking-widest text-slate-600 mb-6">{contatoData.cards.napTitle}</p>
+            <div class="space-y-6">
+              <!-- Endereço -->
+              <div class="flex items-start gap-5 p-5 rounded-2xl bg-white/[0.02] border border-white/[0.04] hover:border-white/10 transition-colors group">
+                <div class="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/10 flex items-center justify-center text-slate-400 shrink-0 group-hover:text-primary-400 transition-colors">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                </div>
+                <div>
+                  <p class="font-semibold text-slate-300 text-sm mb-0.5">{siteConfig.contact.name}</p>
+                  <p class="text-slate-500 text-sm leading-relaxed">{siteConfig.contact.address}</p>
+                  <p class="text-slate-600 text-[10px] mt-1 uppercase tracking-wide">{contatoData.cards.addressLabel}</p>
+                </div>
+              </div>
+              <!-- Telefone -->
+              <div class="flex items-start gap-5 p-5 rounded-2xl bg-white/[0.02] border border-white/[0.04] hover:border-white/10 transition-colors group">
+                <div class="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/10 flex items-center justify-center text-slate-400 shrink-0 group-hover:text-primary-400 transition-colors">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+                </div>
+                <div>
+                  <p class="font-semibold text-slate-300 text-sm mb-0.5">{siteConfig.contact.phone}</p>
+                  <p class="text-slate-600 text-[10px] uppercase tracking-wide">{contatoData.cards.phoneLabel}</p>
+                </div>
+              </div>
+              <!-- Email -->
+              <div class="flex items-start gap-5 p-5 rounded-2xl bg-white/[0.02] border border-white/[0.04] hover:border-white/10 transition-colors group">
+                <div class="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/10 flex items-center justify-center text-slate-400 shrink-0 group-hover:text-primary-400 transition-colors">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                </div>
+                <div>
+                  <a href={`mailto:${siteConfig.contact.email}`} class="font-semibold text-primary-400 text-sm hover:underline">{siteConfig.contact.email}</a>
+                  <p class="text-slate-600 text-[10px] uppercase tracking-wide mt-0.5">{contatoData.cards.emailLabel}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Formulário: dark glass card -->
+        <div class="bg-[#111111] p-8 sm:p-10 rounded-3xl border border-white/[0.05] shadow-2xl shadow-black/50 relative overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-br from-primary-600/5 to-transparent pointer-events-none"></div>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-slate-600 mb-8">Envie sua mensagem</p>
+          <form class="space-y-5 relative z-10">
+            <div>
+              <label for="name" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Nome Completo</label>
+              <input type="text" id="name" placeholder="Ex: João Silva"
+                class="w-full px-4 py-3.5 rounded-xl bg-white/[0.03] border border-white/10 text-slate-200 placeholder-slate-600 focus:outline-none focus:border-primary-500/50 focus:bg-white/[0.05] transition-all text-sm"
+                required />
+            </div>
+            <div>
+              <label for="email" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">E-mail</label>
+              <input type="email" id="email" placeholder="joao@exemplo.com"
+                class="w-full px-4 py-3.5 rounded-xl bg-white/[0.03] border border-white/10 text-slate-200 placeholder-slate-600 focus:outline-none focus:border-primary-500/50 focus:bg-white/[0.05] transition-all text-sm"
+                required />
+            </div>
+            <div>
+              <label for="message" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Mensagem</label>
+              <textarea id="message" rows="5" placeholder="Como podemos te ajudar?"
+                class="w-full px-4 py-3.5 rounded-xl bg-white/[0.03] border border-white/10 text-slate-200 placeholder-slate-600 focus:outline-none focus:border-primary-500/50 focus:bg-white/[0.05] transition-all text-sm resize-none"
+                required></textarea>
+            </div>
+            <button type="submit"
+              class="w-full py-4 rounded-xl bg-white text-slate-900 font-bold text-sm hover:scale-[1.02] transition-all shadow-[0_0_30px_-10px_rgba(255,255,255,0.2)]">
+              {contatoData.cards.formSubmitText}
+            </button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</BaseLayout>

@@ -1,0 +1,18 @@
+{
+    "seo": {
+        "title": "Sobre Nós",
+        "description": "Nascemos com a missão de democratizar o acesso à informação de alto nível.",
+        "image": ""
+    },
+    "hero": {
+        "title": "Conheça nossa Jornada",
+        "image": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop",
+        "desc": "Nascemos com a missão de democratizar o acesso à informação de alto nível. Nossa equipe é composta por profissionais dedicados a transformar conhecimento em ação."
+    },
+    "content": {
+        "missionTitle": "Nossa Missão",
+        "missionText": "Trabalhamos diariamente para entregar o melhor conteúdo sobre o nosso nicho, focando sempre na qualidade e na veracidade das informações compartilhadas.",
+        "teamTitle": "Nossa Equipe",
+        "teamText": "Contamos com um time de especialistas dedicados a pesquisar e produzir artigos que realmente façam a diferença na vida dos nossos leitores."
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "seo": {
+        "title": "Contato",
+        "description": "Entre em contato conosco para tirar dúvidas, dar sugestões ou iniciar um novo projeto.",
+        "image": ""
+    },
+    "hero": {
+        "title": "Fale Conosco",
+        "subtitle": "Estamos aqui para ajudar. Use um dos nossos canais oficiais ou preencha o formulário ao lado."
+    },
+    "cards": {
+        "napTitle": "Informações Oficiais (NAP)",
+        "addressLabel": "Sede Administrativa",
+        "phoneLabel": "Escritório Central",
+        "emailLabel": "Tempo médio de resposta: 24h",
+        "formSubmitText": "Enviar Mensagem"
+    }
+}
